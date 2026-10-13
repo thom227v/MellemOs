@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed = 4f;
 
     void Update()
     {
