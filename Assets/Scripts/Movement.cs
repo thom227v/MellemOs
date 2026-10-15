@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class Movement : MonoBehaviour
 {
     public bool isVoting = false;
+    public bool hasVoted = false;
     public float speed = 4f;
     public GameObject voteButton;
 

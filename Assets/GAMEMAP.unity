@@ -2743,6 +2743,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4933161979361877124, guid: 9592c110ecb1c954e87cfeae2cac98d8, type: 3}
+      propertyPath: scrollRect
+      value: 
+      objectReference: {fileID: 145724543}
+    - target: {fileID: 4933161979361877124, guid: 9592c110ecb1c954e87cfeae2cac98d8, type: 3}
+      propertyPath: VotingPanelContent
+      value: 
+      objectReference: {fileID: 1938766721}
     - target: {fileID: 5397584475233521274, guid: 9592c110ecb1c954e87cfeae2cac98d8, type: 3}
       propertyPath: m_Name
       value: GameManager
