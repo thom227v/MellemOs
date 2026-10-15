@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class Movement : MonoBehaviour
 {
+    public bool isVoting = false;
     public float speed = 4f;
+    public GameObject voteButton;
 
     void Update()
     {
@@ -12,6 +15,7 @@ public class Movement : MonoBehaviour
 
     void Walk()
     {
+        if (isVoting) return;
         Keyboard kb = Keyboard.current;
         if (kb == null) return;
 
@@ -23,5 +27,20 @@ public class Movement : MonoBehaviour
         if (kb.dKey.isPressed) direction += Vector3.right;
 
         transform.Translate(direction.normalized * speed * Time.deltaTime);
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        Debug.Log("Inside zone");
+        Keyboard kb = Keyboard.current;
+        if (other.name == "ReportButton")
+        {
+            voteButton.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.name == "ReportButton") voteButton.SetActive(false);
     }
 }
