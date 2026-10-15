@@ -6,21 +6,22 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NumberPatternMinigame : MonoBehaviour
+public class MemoryMinigame : MonoBehaviour
 {
+    public bool displayText = false;
     public Button closeBtn;
     public GameObject numberButtons;
     private Dictionary<int, Button> numberButtonDict = new();
     private int rowIndex = 0;
     private List<int> numbersInOrder = new List<int>();
     private bool coroutineRunning = false;
-    private int MaxNumbers = 10;
-    private Color defaultColor = Color.white;
+    private int MaxNumbers;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         closeBtn.onClick.AddListener(CloseMinigame);
         Button[]  numberButtonArray = numberButtons.GetComponentsInChildren<Button>();
+        MaxNumbers = numberButtonArray.Length;
 
         List<int> numbers = new List<int>();
         for(int i = 1; i < MaxNumbers + 1; i++)
@@ -32,7 +33,10 @@ public class NumberPatternMinigame : MonoBehaviour
         foreach(Button button in numberButtonArray)
         {
             int randomNumber = numbers[random.Next(0, numbers.Count - 1)];
-            button.GetComponentInChildren<TMP_Text>().text = randomNumber.ToString();
+            if (displayText)
+            {
+                button.GetComponentInChildren<TMP_Text>().text = randomNumber.ToString();
+            }
             button.onClick.AddListener(() => { NumerBtnCOnClick(randomNumber); });
             numberButtonDict.Add(randomNumber, button);
             numbers.Remove(randomNumber);
@@ -66,6 +70,7 @@ public class NumberPatternMinigame : MonoBehaviour
         {
             rowIndex++;
             Button button = numberButtonDict[number];
+            Color defaultColor = button.image.color;
             button.image.color = Color.green;
             yield return new WaitForSeconds(0.25f);
             button.image.color = defaultColor;
@@ -80,6 +85,7 @@ public class NumberPatternMinigame : MonoBehaviour
         {
             numbersInOrder = new List<int>();
             Button button = numberButtonDict[number];
+            Color defaultColor = button.image.color;
             button.image.color = Color.red;
             yield return new WaitForSeconds(0.5f);
             button.image.color = defaultColor;
@@ -99,6 +105,7 @@ public class NumberPatternMinigame : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.5f);
                 Button button = numberButtonDict[number];
+                Color defaultColor = button.image.color;
                 button.image.color = Color.yellow;
                 yield return new WaitForSeconds(1f);
                 button.image.color = defaultColor;
