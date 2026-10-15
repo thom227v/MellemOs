@@ -11,6 +11,7 @@ public class MemoryMinigame : MonoBehaviour
     public bool displayText = false;
     public Button closeBtn;
     public GameObject numberButtons;
+    private Dictionary<int, Color> standardColors = new();
     private Dictionary<int, Button> numberButtonDict = new();
     private int rowIndex = 0;
     private List<int> numbersInOrder = new List<int>();
@@ -39,6 +40,7 @@ public class MemoryMinigame : MonoBehaviour
             }
             button.onClick.AddListener(() => { NumerBtnCOnClick(randomNumber); });
             numberButtonDict.Add(randomNumber, button);
+            standardColors.Add(randomNumber, button.image.color);
             numbers.Remove(randomNumber);
         }
 
@@ -66,14 +68,13 @@ public class MemoryMinigame : MonoBehaviour
 
     private IEnumerator CheckAnswerCO(int number)
     {
-        if (numbersInOrder[rowIndex] == number)
+        if ((numbersInOrder.Count - 1) >= rowIndex && numbersInOrder[rowIndex] == number)
         {
             rowIndex++;
             Button button = numberButtonDict[number];
-            Color defaultColor = button.image.color;
             button.image.color = Color.green;
             yield return new WaitForSeconds(0.25f);
-            button.image.color = defaultColor;
+            button.image.color = standardColors[number];
             yield return new WaitForSeconds(0.25f);
 
             if (numbersInOrder.Count - 1 == rowIndex - 1)
@@ -85,10 +86,9 @@ public class MemoryMinigame : MonoBehaviour
         {
             numbersInOrder = new List<int>();
             Button button = numberButtonDict[number];
-            Color defaultColor = button.image.color;
             button.image.color = Color.red;
             yield return new WaitForSeconds(0.5f);
-            button.image.color = defaultColor;
+            button.image.color = standardColors[number];
             yield return new WaitForSeconds(0.5f);
 
             StartCoroutine(HighlightNumbersCO());
@@ -105,10 +105,9 @@ public class MemoryMinigame : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.5f);
                 Button button = numberButtonDict[number];
-                Color defaultColor = button.image.color;
                 button.image.color = Color.yellow;
                 yield return new WaitForSeconds(1f);
-                button.image.color = defaultColor;
+                button.image.color = standardColors[number];
             }
             coroutineRunning = false;
         }
