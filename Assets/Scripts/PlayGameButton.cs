@@ -5,6 +5,9 @@ public class PlayGameButton : MonoBehaviour
 {
     public GameObject menuUI;
     public Button playButton;
+    public GameObject LobbyMenu = GameObject.Find("LobbyMenu");
+    public GameObject PlayGame = GameObject.Find("PlayGame");
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,7 +17,9 @@ public class PlayGameButton : MonoBehaviour
     void TaskOnClick()
     {
         // Mock for now, should have opened websocket normally.
-        menuUI.SetActive(false);
+        LobbyMenu.SetActive(true);
+        PlayGame.SetActive(false);
+        //menuUI.SetActive(false);
     }
 
 
