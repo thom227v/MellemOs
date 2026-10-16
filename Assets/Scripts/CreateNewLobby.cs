@@ -1,9 +1,13 @@
 using System;
+using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CreateNewLobby : MonoBehaviour
 {
+    [SerializeField]
+    private TMP_InputField lobbyName;
 
     void Start()
     {
@@ -12,11 +16,15 @@ public class CreateNewLobby : MonoBehaviour
 
     private void CreateLobby()
     {
-        string username = PlayerPrefs.GetString("username", "Player");
-        WSService.Instance.CreateLobby("NewLobby");
+        if (lobbyName == null || string.IsNullOrEmpty(lobbyName.text) || lobbyName.text.Length < 3)
+        {
+            Debug.LogWarning("Lobby name cannot be empty and must be at least 3 characters long.");
+            return;
+        }
+        string username = PlayerPrefs.GetString("username");
+        WSService.Instance.CreateLobby(lobbyName.text);
     }
 
-    // Update is called once per frame
     void Update()
     {
         

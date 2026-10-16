@@ -1,4 +1,6 @@
-﻿namespace MellemOs.Models
+﻿using MellemOs.Enums;
+
+namespace MellemOs.Models
 {
     public class Lobby
     {

@@ -1,5 +1,6 @@
 using MellemOs.Hubs;
 using MellemOs.Models;
+using MellemOs.Services;
 
 namespace MellemOs
 {
@@ -10,6 +11,7 @@ namespace MellemOs
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddSignalR();
             builder.Services.AddSingleton<Lobbies>();
+            builder.Services.AddSingleton<LobbyService>();
             var app = builder.Build();
 
             app.MapHub<LobbyHub>("/hubs/lobby");

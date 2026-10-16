@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MellemOs")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c1a7a8930f3651d493d9fc2aa87a5ab6d51fc55")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac0a10450de549016a223f066aa2fe586b418189")]
 [assembly: System.Reflection.AssemblyProductAttribute("MellemOs")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MellemOs")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

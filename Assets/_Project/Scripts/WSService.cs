@@ -91,7 +91,6 @@ public class WSService : MonoBehaviour
             Debug.Log("error" + e.Message);
         }
         Lobbies lobbies = GetLobbies();
-        Debug.Log(lobbies.Lobbier[0].Name);
     }
 
     public async void JoinLobby(Lobby lobby)
@@ -100,11 +99,11 @@ public class WSService : MonoBehaviour
         await _connection.InvokeAsync("JoinLobby", lobby, username);
     }
 
-    //public async void CreateLobby(string lobbyName)
-    //{
-    //    string username = PlayerPrefs.GetString("username");
-    //    await _connection.InvokeAsync("CreateLobby", lobbyName, username);
-    //}
+    public async void CreateLobby(string lobbyName)
+    {
+        string username = PlayerPrefs.GetString("username");
+        await _connection.InvokeAsync("CreateLobby", lobbyName, username);
+    }
 }
 
 [Serializable]
@@ -137,7 +136,10 @@ public record Role
     public string Name { get; set; }
     public int AbilityCooldown { get; set; }
 }
-public record GameState
+
+public enum GameState
 {
-    public string Type { get; set; }
+    NotStarted = 0,
+    InProgress = 1,
+    Ended = 2
 }
