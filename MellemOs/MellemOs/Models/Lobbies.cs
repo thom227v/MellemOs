@@ -2,8 +2,8 @@
 
 namespace MellemOs.Models
 {
-    public class Server
+    public class Lobbies
     {
-        public List<Session> Sessions { get; set; } = [];
+        public List<Lobby> Lobbier { get; set; } = [];
     }
 }
