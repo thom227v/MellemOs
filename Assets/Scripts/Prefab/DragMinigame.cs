@@ -3,8 +3,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DragMinigame : MonoBehaviour
+public class DragMinigame : MonoBehaviour, IMinigame
 {
+    public int id { get; set; }
+    public MinigameManager minigameManager { get; set; }
     public Button closeBtn;
     public GameObject shapes;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,7 +32,7 @@ public class DragMinigame : MonoBehaviour
 
         if (completedTasks == shapesArray.Length)
         {
-            Debug.Log("TASKS COMPLETED");
+            minigameManager.CompletedMinigame(id);
         }
     }
 
@@ -42,6 +44,7 @@ public class DragMinigame : MonoBehaviour
 
     void CloseMinigame()
     {
-        DestroyImmediate(gameObject.transform.parent.gameObject, true);
+        minigameManager.ClosedMinigame();
+        DestroyImmediate(gameObject, true);
     }
 }
