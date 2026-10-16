@@ -7,6 +7,8 @@ public class MinigameManager : MonoBehaviour
     public Canvas ShapeGame;
     public Canvas ElectricalGame;
     public Canvas RedLightGame;
+    public Canvas NumberMinigame;
+    public Canvas ColorMinigame;
     public bool minigameOpen = false;
     private Dictionary<int, Canvas> minigames = new Dictionary<int, Canvas>();
 
@@ -26,9 +28,11 @@ public class MinigameManager : MonoBehaviour
 
         minigames = new Dictionary<int, Canvas>()
         {
-            { 0, ShapeGame }
-            //{ 1, ElectricalGame },
-            //{ 2, RedLightGame }
+            { 0, ShapeGame },
+            { 1, ElectricalGame },
+            { 2, RedLightGame },
+            { 3, NumberMinigame  },
+            { 4, ColorMinigame  }
         };
     }
 

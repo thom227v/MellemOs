@@ -65,6 +65,18 @@ public class Movement : MonoBehaviour
                     MinigameManager.Instance.StartMinigameById(2);
                 }
                 break;
+            case "NumberMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(3);
+                }
+                break;
+            case "ColorMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(4);
+                }
+                break;
         }
     }
 

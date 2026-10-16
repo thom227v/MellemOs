@@ -255,6 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac592ad028b7d604bb0d3d146d082f81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightButtonExecutor
+  redLightMinigame: {fileID: 6131606960972771265}
 --- !u!1 &767022253202715732
 GameObject:
   m_ObjectHideFlags: 0

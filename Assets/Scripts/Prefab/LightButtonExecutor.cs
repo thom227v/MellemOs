@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 public class LightButtonExecutor : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
+    public RedLightMinigame redLightMinigame;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -55,7 +56,7 @@ public class LightButtonExecutor : MonoBehaviour, IPointerUpHandler, IPointerDow
             button.image.color = Color.green;
             button.GetComponentInChildren<TMP_Text>().text = "WON";
             Completed = true;
-            // REPORT TO TASK HERE
+            redLightMinigame.CompletedMinigame();
         }
         else
         {
