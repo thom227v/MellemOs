@@ -7,14 +7,12 @@ public class UsernameConfirmation : MonoBehaviour
 {
     [SerializeField]
     private TMP_InputField username;
-    [SerializeField]
-    private Button button;
     public GameObject LobbyMenu;
     public GameObject UsernameMenu;
 
     void Start()
     {
-        button.onClick.AddListener(UsernameConfirm);
+        gameObject.GetComponent<Button>().onClick.AddListener(UsernameConfirm);
     }
 
     private async void UsernameConfirm()
