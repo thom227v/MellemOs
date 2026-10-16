@@ -7,6 +7,7 @@ public class VoteOptions : MonoBehaviour
     [SerializeField] private GameObject buttonPrefab;
     public void Setup(List<string> options)
     {
+        Debug.Log("Setting up vote options");
         foreach (Transform child in transform)
             Destroy(child.gameObject);
 

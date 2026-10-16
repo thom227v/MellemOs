@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class Movement : MonoBehaviour
 {
     public bool isVoting = false;
+    public bool hasVoted = false;
     public float speed = 4f;
     public GameObject voteButton;
 
@@ -36,6 +37,34 @@ public class Movement : MonoBehaviour
         if (other.name == "ReportButton")
         {
             voteButton.SetActive(true);
+        }
+
+        switch (other.name)
+        {
+            case "ReportButton":
+                if (kb.rKey.wasPressedThisFrame)
+                {
+                    GameManager.Instance.ReportButtonTriggered();
+                }
+                break;
+            case "ShapesMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(0);
+                }
+                break;
+            case "ElectricalMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(1);
+                }
+                break;
+            case "RedLightMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(2);
+                }
+                break;
         }
     }
 
