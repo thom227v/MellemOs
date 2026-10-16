@@ -38,6 +38,34 @@ public class Movement : MonoBehaviour
         {
             voteButton.SetActive(true);
         }
+
+        switch (other.name)
+        {
+            case "ReportButton":
+                if (kb.rKey.wasPressedThisFrame)
+                {
+                    GameManager.Instance.ReportButtonTriggered();
+                }
+                break;
+            case "ShapesMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(0);
+                }
+                break;
+            case "ElectricalMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(1);
+                }
+                break;
+            case "RedLightMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(2);
+                }
+                break;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
