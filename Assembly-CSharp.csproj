@@ -56,6 +56,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Scripts\Prefab\DragMinigame.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
+    <Compile Include="Assets\Scripts\LobbyScene\PlayersInLobbyWaiting.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\LobbyScene\OpenCreateLobbyMenu.cs" />
     <Compile Include="Assets\Scripts\LobbyScene\Menu.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Assets\Scripts\LobbyScene\PlayGameButton.cs" />
     <Compile Include="Assets\Scripts\GameMap\VotingPanel.cs" />
     <Compile Include="Assets\Scripts\GameMap\VoteOptions.cs" />
+    <Compile Include="Assets\Scripts\LobbyScene\LobbyWaiting.cs" />
     <Compile Include="Assets\Scripts\Prefab\MinigameManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Prefab\DragWireExecutor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\Scripts\LobbyScene\StartGame.cs" />
     <Compile Include="Assets\Scripts\LobbyScene\JoinGame.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\LobbyScene\CreateLobbies.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="Assets\Scripts\GameMap\TestingHelper.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\_Project\Scripts\BroadcastService.cs" />
+    <Compile Include="Assets\Scripts\LobbyScene\LeaveLobby.cs" />
     <Compile Include="Assets\Scripts\LobbyScene\LobbyMenu.cs" />
     <Compile Include="Assets\Scripts\Prefab\LightButtonExecutor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
