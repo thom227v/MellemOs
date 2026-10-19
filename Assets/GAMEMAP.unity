@@ -148,8 +148,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1918714395}
   - {fileID: 1538722396}
+  - {fileID: 1918714395}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &58733700
@@ -3078,9 +3078,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efeecc3de54d234797326e5bc5d7919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigameManager
-  ShapeGame: {fileID: 1814439054}
-  ElectricalGame: {fileID: 1409472741}
-  RedLightGame: {fileID: 1918714398}
+  ShapeGame: {fileID: 6963526616559453362, guid: b011d532f94788a4f948c717fdf7995a, type: 3}
+  ElectricalGame: {fileID: 972234326975139248, guid: 19ba7fa3ee4d9644ab5239aa96f42205, type: 3}
+  RedLightGame: {fileID: 2900695859402276068, guid: 7ed390034414e4647a73c23c0b23922a, type: 3}
+  NumberMinigame: {fileID: 4874716059744534686, guid: dcda7d606e050924fa7e1eaeeeae114e, type: 3}
+  ColorMinigame: {fileID: 5982526366007112859, guid: 68cf4575b3b040548a98da1db06d20d3, type: 3}
+  minigameOpen: 0
 --- !u!1 &830429291
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,7 +3369,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 19ba7fa3ee4d9644ab5239aa96f42205, type: 3}
 --- !u!224 &864474271 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5980155353721118078, guid: 19ba7fa3ee4d9644ab5239aa96f42205, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2210504199008945583, guid: 19ba7fa3ee4d9644ab5239aa96f42205, type: 3}
   m_PrefabInstance: {fileID: 864474270}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &906070724
@@ -4872,11 +4875,6 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5938763419627178385, guid: 4f2f55aaa60e82444967f3fbf72a198e, type: 3}
   m_PrefabInstance: {fileID: 1357462637}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &1409472741 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 6939325203860165085, guid: 19ba7fa3ee4d9644ab5239aa96f42205, type: 3}
-  m_PrefabInstance: {fileID: 864474270}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1428162074
 GameObject:
@@ -6497,11 +6495,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!223 &1814439054 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 7939545549827601748, guid: 809645ba77396214b9a56652abfa4570, type: 3}
-  m_PrefabInstance: {fileID: 1109270073}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1858023828
 GameObject:
   m_ObjectHideFlags: 0
@@ -6531,8 +6524,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 864474271}
   - {fileID: 717804933}
+  - {fileID: 864474271}
   m_Father: {fileID: 822534892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1918714394
@@ -6634,12 +6627,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 7ed390034414e4647a73c23c0b23922a, type: 3}
 --- !u!224 &1918714395 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7400950986900427421, guid: 7ed390034414e4647a73c23c0b23922a, type: 3}
-  m_PrefabInstance: {fileID: 1918714394}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &1918714398 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 9050055150364926176, guid: 7ed390034414e4647a73c23c0b23922a, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7720199108440642705, guid: 7ed390034414e4647a73c23c0b23922a, type: 3}
   m_PrefabInstance: {fileID: 1918714394}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1931495820

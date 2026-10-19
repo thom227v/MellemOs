@@ -38,6 +38,7 @@ public class MinigameManager : MonoBehaviour
 
     public void StartMinigameById(int id)
     {
+        Debug.Log($"{id}");
         if (minigameOpen) { return; }
         if (minigames.ContainsKey(id))
         {
@@ -57,6 +58,7 @@ public class MinigameManager : MonoBehaviour
     public void CompletedMinigame(int id)
     {
         Debug.Log($"Completed {id}");
+        // SEND TING TO THE TING TING SERVER BOOM BOOM
         minigameOpen = false;
     }
 
