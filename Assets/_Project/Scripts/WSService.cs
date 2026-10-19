@@ -98,6 +98,7 @@ public class WSService : MonoBehaviour
         string username = PlayerPrefs.GetString("username");
         await _connection.InvokeAsync("JoinLobby", lobbyName, username);
     }
+    //
 
     public async void CreateLobby(string lobbyName, int size)
     {
