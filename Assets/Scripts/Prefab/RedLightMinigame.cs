@@ -22,8 +22,7 @@ public class RedLightMinigame : MonoBehaviour, IMinigame
 
     public void CompletedMinigame()
     {
-        minigameManager.CompletedMinigame(id);
-        Destroy(gameObject);
+        minigameManager.CompletedMinigame(id, gameObject);
     }
 
     void CloseMinigame()

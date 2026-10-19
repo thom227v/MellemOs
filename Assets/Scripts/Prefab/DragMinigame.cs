@@ -32,8 +32,7 @@ public class DragMinigame : MonoBehaviour, IMinigame
 
         if (completedTasks == shapesArray.Length)
         {
-            minigameManager.CompletedMinigame(id);
-            Destroy(gameObject);
+            minigameManager.CompletedMinigame(id, gameObject);
         }
 
     }

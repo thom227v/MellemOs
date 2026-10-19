@@ -61,8 +61,7 @@ public class MemoryMinigame : MonoBehaviour, IMinigame
 
         if (rowIndex == 5)
         {
-            minigameManager.CompletedMinigame(id);
-            Destroy(gameObject);
+            minigameManager.CompletedMinigame(id, gameObject);
             return;
         }
 

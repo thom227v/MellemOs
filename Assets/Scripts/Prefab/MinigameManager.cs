@@ -55,16 +55,17 @@ public class MinigameManager : MonoBehaviour
         }
     }
 
-    public void CompletedMinigame(int id)
+    public void CompletedMinigame(int id, GameObject gameObject)
     {
         Debug.Log($"Completed {id}");
         // SEND TING TO THE TING TING SERVER BOOM BOOM
+        Destroy(gameObject);
         minigameOpen = false;
     }
 
     public void ClosedMinigame(GameObject gameObject)
     {
-        minigameOpen = false;
         Destroy(gameObject);
+        minigameOpen = false;
     }
 }
