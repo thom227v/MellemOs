@@ -28,6 +28,17 @@ public class Movement : MonoBehaviour
         if (kb.dKey.isPressed) direction += Vector3.right;
 
         transform.Translate(direction.normalized * speed * Time.deltaTime);
+
+        if (direction != Vector3.zero)
+        {
+            PlayerPositionData positionData = new PlayerPositionData
+            {
+                PlayerId = "Player1",
+                PositionX = transform.position.x,
+                PositionY = transform.position.y
+            };
+            WSGameMap.Instance.SendPlayerPosition(positionData);
+        }
     }
 
     void OnTriggerStay2D(Collider2D other)

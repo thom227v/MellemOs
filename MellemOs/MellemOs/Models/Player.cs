@@ -6,7 +6,7 @@
         public bool IsAlive { get; set; } = true;
         public Role? Role { get; set; } // possible better ways to handle roles before gameState = started
         public string[] Position { get; set; } = [];
-        public Task? CurrentTask { get; set; }
-        public List<Task> TasksToDo { get; set; } = [];
+        public GameTask? CurrentTask { get; set; }
+        public List<GameTask> TasksToDo { get; set; } = [];
     }
 }
