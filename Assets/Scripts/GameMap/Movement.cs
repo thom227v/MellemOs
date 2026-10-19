@@ -28,11 +28,22 @@ public class Movement : MonoBehaviour
         if (kb.dKey.isPressed) direction += Vector3.right;
 
         transform.Translate(direction.normalized * speed * Time.deltaTime);
+
+        if (direction != Vector3.zero)
+        {
+            PlayerPositionData positionData = new PlayerPositionData
+            {
+                PlayerId = "Player1",
+                PositionX = transform.position.x,
+                PositionY = transform.position.y
+            };
+            WSGameMap.Instance.SendPlayerPosition(positionData);
+        }
     }
 
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("Inside zone");
+        //Debug.Log("Inside zone");
         Keyboard kb = Keyboard.current;
         if (other.name == "ReportButton")
         {
@@ -59,10 +70,22 @@ public class Movement : MonoBehaviour
                     MinigameManager.Instance.StartMinigameById(1);
                 }
                 break;
-            case "RedLightMinigame":
+            case "RedLightMiniGame":
                 if (kb.eKey.wasPressedThisFrame)
                 {
                     MinigameManager.Instance.StartMinigameById(2);
+                }
+                break;
+            case "NumberMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(3);
+                }
+                break;
+            case "ColorMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(4);
                 }
                 break;
         }

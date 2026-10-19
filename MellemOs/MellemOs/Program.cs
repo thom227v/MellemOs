@@ -12,9 +12,11 @@ namespace MellemOs
             builder.Services.AddSignalR();
             builder.Services.AddSingleton<Lobbies>();
             builder.Services.AddSingleton<LobbyService>();
+            builder.Services.AddSingleton<MatchService>();
             var app = builder.Build();
 
             app.MapHub<LobbyHub>("/hubs/lobby");
+            app.MapHub<MatchHub>("/hubs/match/{matchId}");
 
 
             app.MapGet("/", () => "Hello World!");

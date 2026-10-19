@@ -6,8 +6,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MemoryMinigame : MonoBehaviour
+public class MemoryMinigame : MonoBehaviour, IMinigame
 {
+    public int id { get; set; }
+    public MinigameManager minigameManager { get; set; }
     public bool displayText = false;
     public Button closeBtn;
     public GameObject numberButtons;
@@ -59,7 +61,7 @@ public class MemoryMinigame : MonoBehaviour
 
         if (rowIndex == 5)
         {
-            Debug.Log("YOU WON");
+            minigameManager.CompletedMinigame(id, gameObject);
             return;
         }
 
@@ -120,6 +122,6 @@ public class MemoryMinigame : MonoBehaviour
 
     void CloseMinigame()
     {
-        DestroyImmediate(gameObject.transform.parent.gameObject, true);
+        minigameManager.ClosedMinigame(gameObject);
     }
 }

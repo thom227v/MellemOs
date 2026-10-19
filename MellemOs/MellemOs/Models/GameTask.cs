@@ -1,6 +1,6 @@
 ﻿namespace MellemOs.Models
 {
-    public class Task
+    public class GameTask
     {
         public required string Name { get; set; }
     }
