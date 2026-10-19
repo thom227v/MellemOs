@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -90,19 +91,32 @@ public class WSService : MonoBehaviour
         {
             Debug.Log("error" + e.Message);
         }
-        Lobbies lobbies = GetLobbies();
     }
 
-    public async void JoinLobby(Lobby lobby)
+    public async void JoinLobby(string lobbyName)
     {
         string username = PlayerPrefs.GetString("username");
-        await _connection.InvokeAsync("JoinLobby", lobby, username);
+        await _connection.InvokeAsync("JoinLobby", lobbyName, username);
     }
 
-    public async void CreateLobby(string lobbyName)
+    public async void CreateLobby(string lobbyName, int size)
     {
-        string username = PlayerPrefs.GetString("username");
-        await _connection.InvokeAsync("CreateLobby", lobbyName, username);
+        await _connection.InvokeAsync("CreateLobby", lobbyName, size);
+    }
+
+    public async Task<string[]> GetPlayersInCurrentLobby()
+    {
+        return await _connection.InvokeAsync<string[]>("GetPlayersInCurrentPlayerLobby", PlayerPrefs.GetString("username"));
+    }
+
+    public async void StartGame(string lobbyName)
+    {
+        await _connection.InvokeAsync("StartGame", lobbyName);
+    }
+
+    public async void LeaveLobby()
+    {
+        await _connection.InvokeAsync("LeaveLobby", PlayerPrefs.GetString("username"));
     }
 }
 

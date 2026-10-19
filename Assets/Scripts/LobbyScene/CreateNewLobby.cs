@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class CreateNewLobby : MonoBehaviour
 {
-    [SerializeField]
-    private TMP_InputField lobbyName;
+    public TMP_InputField lobbyName;
+    public TMP_InputField lobbySize;
 
+    public GameObject LobbyWaitingMenu;
+    public GameObject CreateLobbyMenu;
     void Start()
     {
         gameObject.GetComponent<Button>().onClick.AddListener(CreateLobby);
@@ -16,13 +18,20 @@ public class CreateNewLobby : MonoBehaviour
 
     private void CreateLobby()
     {
-        if (lobbyName == null || string.IsNullOrEmpty(lobbyName.text) || lobbyName.text.Length < 3)
+        if (string.IsNullOrEmpty(lobbyName.text) || lobbyName.text.Length < 3)
         {
             Debug.LogWarning("Lobby name cannot be empty and must be at least 3 characters long.");
             return;
         }
+        if (string.IsNullOrEmpty(lobbySize.text) || !int.TryParse(lobbySize.text, out int size) || size < 2)
+        {
+            Debug.LogWarning("Lobby size must be a number and at least 2.");
+            return;
+        }
         string username = PlayerPrefs.GetString("username");
-        WSService.Instance.CreateLobby(lobbyName.text);
+        WSService.Instance.CreateLobby(lobbyName.text, size);
+        LobbyWaitingMenu.SetActive(true);
+        CreateLobbyMenu.SetActive(false);
     }
 
     void Update()

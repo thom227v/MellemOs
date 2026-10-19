@@ -4,6 +4,7 @@ using UnityEngine;
 public class OpenCreateLobbyMenu : MonoBehaviour
 {
     public GameObject CreateLobbyMenu;
+    public GameObject LobbyMenu;
     void Start()
     {
         gameObject.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OpenMenu);
@@ -12,7 +13,7 @@ public class OpenCreateLobbyMenu : MonoBehaviour
     private void OpenMenu()
     {
         CreateLobbyMenu.SetActive(true);
-        gameObject.SetActive(false);
+        LobbyMenu.SetActive(false);
     }
 
     // Update is called once per frame
