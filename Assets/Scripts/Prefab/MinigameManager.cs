@@ -7,7 +7,9 @@ public class MinigameManager : MonoBehaviour
     public Canvas ShapeGame;
     public Canvas ElectricalGame;
     public Canvas RedLightGame;
-
+    public Canvas NumberMinigame;
+    public Canvas ColorMinigame;
+    public bool minigameOpen = false;
     private Dictionary<int, Canvas> minigames = new Dictionary<int, Canvas>();
 
 
@@ -28,15 +30,24 @@ public class MinigameManager : MonoBehaviour
         {
             { 0, ShapeGame },
             { 1, ElectricalGame },
-            { 2, RedLightGame }
+            { 2, RedLightGame },
+            { 3, NumberMinigame  },
+            { 4, ColorMinigame  }
         };
     }
 
     public void StartMinigameById(int id)
     {
+        Debug.Log($"{id}");
+        if (minigameOpen) { return; }
         if (minigames.ContainsKey(id))
         {
-            minigames[id].gameObject.SetActive(true);
+            minigameOpen = true;
+            Canvas canvas = Instantiate(minigames[id]);
+            IMinigame minigame = canvas.GetComponent<IMinigame>();
+            minigame.id = id;
+            minigame.minigameManager = this;
+            canvas.gameObject.SetActive(true);
         }
         else
         {
@@ -44,4 +55,17 @@ public class MinigameManager : MonoBehaviour
         }
     }
 
+    public void CompletedMinigame(int id, GameObject gameObject)
+    {
+        Debug.Log($"Completed {id}");
+        // SEND TING TO THE TING TING SERVER BOOM BOOM
+        Destroy(gameObject);
+        minigameOpen = false;
+    }
+
+    public void ClosedMinigame(GameObject gameObject)
+    {
+        Destroy(gameObject);
+        minigameOpen = false;
+    }
 }

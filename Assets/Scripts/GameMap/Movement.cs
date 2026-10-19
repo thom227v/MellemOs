@@ -43,7 +43,7 @@ public class Movement : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("Inside zone");
+        //Debug.Log("Inside zone");
         Keyboard kb = Keyboard.current;
         if (other.name == "ReportButton")
         {
@@ -70,10 +70,22 @@ public class Movement : MonoBehaviour
                     MinigameManager.Instance.StartMinigameById(1);
                 }
                 break;
-            case "RedLightMinigame":
+            case "RedLightMiniGame":
                 if (kb.eKey.wasPressedThisFrame)
                 {
                     MinigameManager.Instance.StartMinigameById(2);
+                }
+                break;
+            case "NumberMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(3);
+                }
+                break;
+            case "ColorMinigame":
+                if (kb.eKey.wasPressedThisFrame)
+                {
+                    MinigameManager.Instance.StartMinigameById(4);
                 }
                 break;
         }
