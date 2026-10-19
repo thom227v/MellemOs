@@ -28,6 +28,7 @@ public class RedLightMinigame : MonoBehaviour, IMinigame
 
     void CloseMinigame()
     {
+        minigameManager.ClosedMinigame();
         DestroyImmediate(gameObject.transform.parent.gameObject, true);
     }
 }
