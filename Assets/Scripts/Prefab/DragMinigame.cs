@@ -46,7 +46,6 @@ public class DragMinigame : MonoBehaviour, IMinigame
 
     void CloseMinigame()
     {
-        minigameManager.ClosedMinigame();
-        DestroyImmediate(gameObject, true);
+        minigameManager.ClosedMinigame(gameObject);
     }
 }

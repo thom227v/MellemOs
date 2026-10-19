@@ -123,7 +123,6 @@ public class MemoryMinigame : MonoBehaviour, IMinigame
 
     void CloseMinigame()
     {
-        minigameManager.ClosedMinigame();
-        DestroyImmediate(gameObject, true);
+        minigameManager.ClosedMinigame(gameObject);
     }
 }

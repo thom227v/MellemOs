@@ -62,8 +62,9 @@ public class MinigameManager : MonoBehaviour
         minigameOpen = false;
     }
 
-    public void ClosedMinigame()
+    public void ClosedMinigame(GameObject gameObject)
     {
         minigameOpen = false;
+        Destroy(gameObject);
     }
 }
