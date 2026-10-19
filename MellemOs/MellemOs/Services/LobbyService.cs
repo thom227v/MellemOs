@@ -13,7 +13,7 @@ namespace MellemOs.Services
 
         public void ChangeLobby(Lobby lobby)
         {
-            var existingLobby = lobbies.Lobbier.FirstOrDefault(l => l.Id == lobby.Id);
+            Lobby? existingLobby = lobbies.Lobbier.FirstOrDefault(l => l.Name == lobby.Name);
             if (existingLobby != null)
             {
                 existingLobby.Name = lobby.Name;
@@ -33,6 +33,11 @@ namespace MellemOs.Services
         public Lobby? GetLobbyById(int lobbyId)
         {
             return lobbies.Lobbier.FirstOrDefault(l => l.Id == lobbyId);
+        }
+
+        public Lobby? GetLobbyByName(string lobbyName)
+        {
+            return lobbies.Lobbier.FirstOrDefault(l => l.Name == lobbyName);
         }
     }
 }
