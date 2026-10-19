@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject votingButton;
     public GameObject votingPanel;
     public TMP_Text votedStats;
+    public GameObject entityPrefab;
+    public MonoScript entityMoverScript;
 
     private List<string> players = new List<string> { "Player1", "Player2", "Player3", "Skip" };
     private Dictionary<string, int> voteCounts = GetEmptyVoteDictioaryFromPlayers(new string[] { "Player1", "Player2", "Player3", "Skip" });
@@ -41,6 +44,12 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
+        }
+
+        foreach (var player in players)
+        {
+            Vector3 randomPosition = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
+            CreateEntity(player, randomPosition);
         }
     }
 
@@ -141,5 +150,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Canvas.ForceUpdateCanvases();
         scrollRect.verticalNormalizedPosition = 0f;
+    }
+
+    private void CreateEntity(string entityName, Vector3 position)
+    {
+        GameObject entity = Instantiate(entityPrefab, position, Quaternion.identity);
+        entity.name = entityName;
+        entity.AddComponent<EntityMover>();
     }
 }

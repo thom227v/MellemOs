@@ -8,7 +8,6 @@ namespace MellemOs.Hubs;
 
 public class MatchHub(MatchService matchService) : Hub
 {
-    Match? match;
     public override async Task OnConnectedAsync()
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
@@ -19,12 +18,13 @@ public class MatchHub(MatchService matchService) : Hub
             Context.Abort();
             return;
         }
-        this.match = match;
+
+        Context.Items["matchId"] = matchId;
+
         await Groups.AddToGroupAsync(Context.ConnectionId, $"match:{matchId}");
         Console.WriteLine($"Client {Context.ConnectionId} connected to match {matchId}");
         await base.OnConnectedAsync();
     }
-
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
@@ -34,18 +34,19 @@ public class MatchHub(MatchService matchService) : Hub
     public async Task BroadCastPlayerPosition(PlayerPositionData playerPositionData)
     {
         Console.WriteLine("hello");
-        if (match == null)
+        if (Context.Items["matchId"] is not int matchId)
         {
-            await Clients.Caller.SendAsync("Error", "Match not found");
+            Console.WriteLine("Match ID not found in context items");
+            await Clients.Caller.SendAsync("Error", "Match ID not found");
             return;
         }
 
         var playerId = playerPositionData.PlayerId;
-        var PositionX = playerPositionData.PositionX;
-        var PositionY = playerPositionData.PositionY;
+        var positionX = playerPositionData.PositionX;
+        var positionY = playerPositionData.PositionY;
 
-        Console.WriteLine($"Broadcasting player position for {playerId} in match {match.Id}: ({PositionX}, {PositionY})");
-        await Clients.Group($"match:{match.Id}").SendAsync("PlayerPosition", playerId, PositionX, PositionY);
+        Console.WriteLine($"Broadcasting player position for {playerId} in match {matchId}: ({positionX}, {positionY})");
+        await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerId, positionX, positionY);
     }
 
     private static int GetMatchIdFromRoute(HttpContext? httpContext)
