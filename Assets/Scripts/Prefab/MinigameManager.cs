@@ -43,6 +43,7 @@ public class MinigameManager : MonoBehaviour
     {
         GameTask? task = tasksToDo.FirstOrDefault<GameTask>(l => l.Id == id);
         if (task == null) { return; }
+        if (task.Completed) { return; }
 
         if (minigameOpen) { return; }
         if (minigames.ContainsKey(id))
@@ -65,6 +66,11 @@ public class MinigameManager : MonoBehaviour
         Debug.Log($"Completed {id}");
         // SEND TING TO THE TING TING SERVER BOOM BOOM
         WSGameMap.Instance.CompleteTaskById(PlayerPrefs.GetString("username"), id);
+        GameTask? task = tasksToDo.FirstOrDefault<GameTask>(l => l.Id == id);
+        if (task != null)
+        {
+            task.Completed = true;
+        }
         Destroy(gameObject);
         minigameOpen = false;
     }
