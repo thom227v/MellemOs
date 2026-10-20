@@ -24,9 +24,10 @@ public class JoinGame : MonoBehaviour
         return this;
     }
 
-    private void TaskOnClick()
+    private async void TaskOnClick()
     {
         WSService.Instance.JoinLobby(LobbyName);
+        await PlayersInLobbyWaiting.Instance.UpdatePlayers();
         LobbyMenu.SetActive(false);
         LobbyWaitingMenu.SetActive(true);
     }

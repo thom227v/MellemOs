@@ -14,8 +14,14 @@ public class CreateNewLobby : MonoBehaviour
         gameObject.GetComponent<Button>().onClick.AddListener(CreateLobby);
     }
 
-    private void CreateLobby()
+    private async void CreateLobby()
     {
+        foreach (Transform child in gameObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+
         if (string.IsNullOrEmpty(lobbyName.text) || lobbyName.text.Length < 3)
         {
             Debug.LogWarning("Lobby name cannot be empty and must be at least 3 characters long.");
@@ -31,10 +37,5 @@ public class CreateNewLobby : MonoBehaviour
         WSService.Instance.JoinLobby(lobbyName.text);
         LobbyWaitingMenu.SetActive(true);
         CreateLobbyMenu.SetActive(false);
-    }
-
-    void Update()
-    {
-
     }
 }

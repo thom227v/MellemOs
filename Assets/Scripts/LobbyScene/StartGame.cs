@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
@@ -13,5 +14,6 @@ public class StartGame : MonoBehaviour
     private void StartGameButton()
     {
         WSService.Instance.StartGame(lobbyName.text);
+        SceneManager.LoadScene("GAMEMAP");
     }
 }
