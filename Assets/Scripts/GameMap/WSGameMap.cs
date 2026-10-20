@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -112,8 +113,26 @@ public class WSGameMap : MonoBehaviour
         {
             Debug.LogError($"Failed to send player position: {ex}");
         }
+    }
 
-
+    public async Task<List<MinigameManager.GameTask>> GetTasksByPlayerName(string playerName)
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            return new List<MinigameManager.GameTask>();
+        }
+        try
+        {
+            //Debug.Log("SendPlayerPosition: " + _connection.State);
+            List<MinigameManager.GameTask> listOfTasks = await _connection.InvokeAsync<List<MinigameManager.GameTask>>("GetTasksByPlayerName", playerName);
+            return listOfTasks;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to send player position: {ex}");
+        }
+        return new List<MinigameManager.GameTask>();
     }
 }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MinigameManager : MonoBehaviour
 {
@@ -11,12 +12,14 @@ public class MinigameManager : MonoBehaviour
     public Canvas ColorMinigame;
     public bool minigameOpen = false;
     private Dictionary<int, Canvas> minigames = new Dictionary<int, Canvas>();
-
+    private List<GameTask> tasksToDo = new List<GameTask>();
 
     public static MinigameManager Instance { get; private set; }
 
-    void Awake()
+    async void Awake()
     {
+        tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(PlayerPrefs.GetString("username"));
+
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
@@ -38,7 +41,9 @@ public class MinigameManager : MonoBehaviour
 
     public void StartMinigameById(int id)
     {
-        Debug.Log($"{id}");
+        GameTask? task = tasksToDo.FirstOrDefault<GameTask>(l => l.Id == id);
+        if (task == null) { return; }
+
         if (minigameOpen) { return; }
         if (minigames.ContainsKey(id))
         {
@@ -68,5 +73,12 @@ public class MinigameManager : MonoBehaviour
     {
         Destroy(gameObject);
         minigameOpen = false;
+    }
+
+    public class GameTask
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool Completed { get; set; } = false;
     }
 }
