@@ -59,6 +59,7 @@ public class MinigameManager : MonoBehaviour
     {
         Debug.Log($"Completed {id}");
         // SEND TING TO THE TING TING SERVER BOOM BOOM
+        WSGameMap.Instance.CompleteTaskById(PlayerPrefs.GetString("username"), id);
         Destroy(gameObject);
         minigameOpen = false;
     }
