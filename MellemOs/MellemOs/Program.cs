@@ -13,6 +13,7 @@ namespace MellemOs
             builder.Services.AddSingleton<Lobbies>();
             builder.Services.AddSingleton<LobbyService>();
             builder.Services.AddSingleton<MatchService>();
+            builder.Services.AddSingleton<TaskService>();
             var app = builder.Build();
 
             app.MapHub<LobbyHub>("/hubs/lobby");

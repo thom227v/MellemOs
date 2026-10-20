@@ -96,6 +96,26 @@ public class WSGameMap : MonoBehaviour
         }
     }
 
+    public async void CompleteTaskById(string playerName, int id)
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            return;
+        }
+        try
+        {
+            //Debug.Log("SendPlayerPosition: " + _connection.State);
+            await _connection.SendAsync("CompleteTaskByPlayerName", playerName, id);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to send player position: {ex}");
+        }
+
+
+    }
+
     public async Task<Player[]> GetPlayers()
     {
         if (_connection == null || _connection.State != HubConnectionState.Connected)
