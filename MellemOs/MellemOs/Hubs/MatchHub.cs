@@ -68,17 +68,13 @@ public class MatchHub(MatchService matchService) : Hub
         {
             throw new HubException("Match ID not found in context items");
         }
-
+        Match match = matchService.GetMatchById(matchId) ?? throw new HubException("Match not found");
+        return match.Players;
+    }
     public async void CompleteTaskByPlayerName(string playername, int taskId)
     {
         matchService.CompleteTaskByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername, taskId);
     }
-        Match match = matchService.GetMatchById(matchId) ?? throw new HubException("Match not found");
-        return match.Players;
-
-    }
-
-
 }
 
 public record PlayerPositionData
