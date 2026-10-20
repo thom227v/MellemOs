@@ -58,6 +58,18 @@ public class MatchHub(MatchService matchService) : Hub
         return matchId;
     }
 
+    public async Task<Player[]> GetPlayers()
+    {
+        if (Context.Items["matchId"] is not int matchId)
+        {
+            throw new HubException("Match ID not found in context items");
+        }
+
+        Match match = matchService.GetMatchById(matchId) ?? throw new HubException("Match not found");
+        return match.Players;
+
+    }
+
 
 }
 
