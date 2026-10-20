@@ -17,6 +17,7 @@ public class PlayersInLobbyWaiting : MonoBehaviour
         {
             Debug.Log("Creating player: " + playerName);
             GameObject playerObj = Instantiate(PlayerName);
+            playerObj.GetComponent<TMPro.TMP_Text>().text = playerName;
             playerObj.transform.SetParent(this.transform);
         }
     }

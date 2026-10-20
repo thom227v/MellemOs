@@ -108,7 +108,7 @@ namespace MellemOs.Hubs
             }
         }
 
-        public bool UsernameCheck(string username)
+        public async Task<bool> UsernameCheck(string username)
         {
             Lobbies lobbies = _lobbyService.GetLobbies();
             bool isUsernameTaken = lobbies.Lobbier.Any(l => l.Players.Any(p => p.Name == username));
