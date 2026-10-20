@@ -22,6 +22,12 @@ public class UsernameConfirmation : MonoBehaviour
             Debug.LogWarning("Username cannot be empty and must be at least 3 characters long.");
             return;
         }
+        bool isUsernameTaken = WSService.Instance.UsernameCheck(username.text);
+        if (isUsernameTaken)
+        {
+            Debug.LogWarning("Username is already taken.");
+            return;
+        }
         PlayerPrefs.SetString("username", username.text);
         LobbyMenu.SetActive(true);
         UsernameMenu.SetActive(false);

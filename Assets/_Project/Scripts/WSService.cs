@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,25 @@ public class WSService : MonoBehaviour
         }
     }
 
+    public async Task<bool> UsernameCheck(string username)
+    {
+        if (_connection == null)
+        {
+            Debug.LogWarning("Connection is not established.");
+            return false;
+        }
+        try
+        {
+            bool isUsernameTaken = _connection.InvokeAsync<bool>("UsernameCheck", username).Result;
+            return isUsernameTaken;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to check username: {ex}");
+            return false;
+        }
+    }
+
     public async Task GetConnectionState()
     {
         if (_connection == null)
@@ -65,12 +85,50 @@ public class WSService : MonoBehaviour
         }
         try
         {
-            var lobbies = _connection.InvokeAsync<Lobbies>("GetLobbies").Result;
+            Lobbies lobbies = _connection.InvokeAsync<Lobbies>("GetLobbies").Result;
             return lobbies;
         }
         catch (Exception ex)
         {
             Debug.LogError($"Failed to get lobbies: {ex}");
+            return null;
+        }
+    }
+
+    public Lobbies GetLobbiesNotStarted()
+    {
+        if (_connection == null)
+        {
+            Debug.LogWarning("Connection is not established.");
+            return null;
+        }
+        try
+        {
+            Lobbies lobbies = _connection.InvokeAsync<Lobbies>("GetLobbiesNotStarted").Result;
+            return lobbies;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to get lobbies: {ex}");
+            return null;
+        }
+    }
+
+    public string GetLobbyName()
+    {
+        if (_connection == null)
+        {
+            Debug.LogWarning("Connection is not established.");
+            return null;
+        }
+        try
+        {
+            var lobbyName = _connection.InvokeAsync<string>("GetLobbyName", PlayerPrefs.GetString("username"));
+            return lobbyName.Result;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to get lobby name: {ex}");
             return null;
         }
     }
@@ -98,7 +156,6 @@ public class WSService : MonoBehaviour
         string username = PlayerPrefs.GetString("username");
         await _connection.InvokeAsync("JoinLobby", lobbyName, username);
     }
-    //
 
     public async void CreateLobby(string lobbyName, int size)
     {

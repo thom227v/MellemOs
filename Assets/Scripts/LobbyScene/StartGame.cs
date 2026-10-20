@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class StartGame : MonoBehaviour
 {
-    [SerializeField]
-    private TMP_Text lobbyName;
+    public TMP_Text lobbyName;
     void Start()
     {
         gameObject.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(StartGameButton);

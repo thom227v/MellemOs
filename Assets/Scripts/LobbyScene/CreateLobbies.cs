@@ -16,11 +16,11 @@ public class CreateLobbies : MonoBehaviour
     void Start()
     {
         WSService.OnLobbiesReceived += LobbiesReceived;
-        LobbiesReceived(WSService.GetLobbies());
+        LobbiesReceived(WSService.GetLobbiesNotStarted());
 
         RefreshLobbiesButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-            LobbiesReceived(WSService.GetLobbies());
+            LobbiesReceived(WSService.GetLobbiesNotStarted());
         });
     }
 

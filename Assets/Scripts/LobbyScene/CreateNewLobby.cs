@@ -1,6 +1,4 @@
-using System;
 using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,12 +28,13 @@ public class CreateNewLobby : MonoBehaviour
         }
         string username = PlayerPrefs.GetString("username");
         WSService.Instance.CreateLobby(lobbyName.text, size);
+        WSService.Instance.JoinLobby(lobbyName.text);
         LobbyWaitingMenu.SetActive(true);
         CreateLobbyMenu.SetActive(false);
     }
 
     void Update()
     {
-        
+
     }
 }
