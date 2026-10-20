@@ -7,6 +7,7 @@ using UnityEngine;
 public class WSGameMap : MonoBehaviour
 {
     public const string ServerAddress = "http://localhost:5258/";
+    //public const string ServerAddress = "http://192.168.20.5:7235/";
     private const string Hub = "hubs/match";
     private const int MockMatchId = 0;
 
@@ -65,7 +66,7 @@ public class WSGameMap : MonoBehaviour
         await CreateConnection();
         try
         {
-            _connection.On<PlayerPositionData>("GetLobbies", (playerPositionData) =>
+            _connection.On<PlayerPositionData>("PlayerPosition", (playerPositionData) =>
             {
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
@@ -86,7 +87,7 @@ public class WSGameMap : MonoBehaviour
         }
         try
         {
-            Debug.Log("SendPlayerPosition: " + _connection.State);
+            //Debug.Log("SendPlayerPosition: " + _connection.State);
             await _connection.SendAsync("BroadCastPlayerPosition", playerPositionData);
         }
         catch (Exception ex)
