@@ -1,19 +1,46 @@
-﻿namespace MellemOs.Services
+﻿using MellemOs.Models;
+
+namespace MellemOs.Services
 {
     public class TaskService
     {
-        private Dictionary<int, string> Tasks = new Dictionary<int, string>()
+        private List<GameTask> Tasks = new List<GameTask>()
         {
-            {1, "RedlightMinigame" }
+            new GameTask
+            {
+                Id = 0,
+                Name = "ShapeGame"
+            },
+            new GameTask
+            {
+                Id = 1,
+                Name = "ElectricalGame"
+            },
+            new GameTask
+            {
+                Id = 2,
+                Name = "RedLightGame"
+            },
+              new GameTask
+            {
+                Id = 3,
+                Name = "NumberMinigame"
+            },
+                   new GameTask
+            {
+                Id = 4,
+                Name = "ColorMinigame"
+            }
         };
-        public void GenerateRndTasks()
+        public List<GameTask> GenerateRndTasks()
         {
-
-        }
-
-        public void CompleteTask(string username, int taskId)
-        {
-
+            System.Random rnd = new System.Random();
+            List<GameTask> tasksToDo = new List<GameTask>();
+            for (int i = 0; i < 3; i++)
+            {
+                tasksToDo.Add(Tasks[rnd.Next(0, Tasks.Count - 1)]);
+            }
+            return tasksToDo;
         }
     }
 }

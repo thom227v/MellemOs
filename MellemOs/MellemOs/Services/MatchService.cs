@@ -23,6 +23,12 @@ public class MatchService
     public void CreateMatch(string lobbyName, string[] playersName)
     {
         var match = new Match(_matchIdCounter++, lobbyName, playersName);
+
+        foreach(Player player in match.Players)
+        {
+            player.TasksToDo = _taskService.GenerateRndTasks();
+        }
+
         Matches.Add(match);
         Console.WriteLine($"Match created: {match.Name} with ID: {match.Id}");
     }
