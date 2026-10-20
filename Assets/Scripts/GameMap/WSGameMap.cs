@@ -134,6 +134,28 @@ public class WSGameMap : MonoBehaviour
         }
         return new List<MinigameManager.GameTask>();
     }
+
+    public async Task<Player[]> GetPlayers()
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            return null;
+        }
+        try
+        {
+            var players = await _connection.InvokeAsync<Player[]>("GetPlayers");
+            return players;
+
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to get all players: {ex}");
+        }
+        return null;
+    }
+
+
 }
 
 public record PlayerPositionData

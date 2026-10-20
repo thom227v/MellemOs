@@ -50,12 +50,18 @@ namespace MellemOs.Hubs
 
             Lobby? lobby = _lobbyService.GetLobbyByName(lobbyName);
 
-            if (lobby != null && lobby.MaxPlayers >= lobby.Players.Count + 1 && lobby.Players.Contains(new Player() { Name = username }) == false)
+
+            if (lobby != null && lobby.MaxPlayers >= lobby.Players.Count + 1)
             {
-                lobby.Players.Add(new Player()
+                string[]? playerNames = lobby!.Players.Select(p => p.Name).ToArray();
+
+                if (playerNames != null && !playerNames.Contains(username))
                 {
-                    Name = username
-                });
+                    lobby!.Players.Add(new Player()
+                    {
+                        Name = username
+                    });
+                }
             }
         }
 

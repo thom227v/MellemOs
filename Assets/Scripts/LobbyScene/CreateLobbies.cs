@@ -11,7 +11,6 @@ public class CreateLobbies : MonoBehaviour
     public GameObject LobbyMenu;
     public GameObject LobbyWaitingMenu;
     public GameObject RefreshLobbiesButton;
-    int timer = 0;
 
     void Start()
     {

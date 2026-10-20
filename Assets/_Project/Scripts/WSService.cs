@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class WSService : MonoBehaviour
 {
-    public const string ServerAddress = "https://localhost:7235/";
+    public const string ServerAddress = "http://localhost:5258/";
     private const string Hub = "hubs/lobby";
     private HubConnection _connection;
     public event Action<Lobbies> OnLobbiesReceived;

@@ -1,4 +1,4 @@
-﻿using MellemOs.Models;
+using MellemOs.Models;
 using MellemOs.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
@@ -62,7 +62,15 @@ public class MatchHub(MatchService matchService) : Hub
     { 
         return matchService.GetTasksByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
-
+    public async Task<Player[]> GetPlayers()
+    {
+        if (Context.Items["matchId"] is not int matchId)
+        {
+            throw new HubException("Match ID not found in context items");
+        }
+        Match match = matchService.GetMatchById(matchId) ?? throw new HubException("Match not found");
+        return match.Players;
+    }
     public async void CompleteTaskByPlayerName(string playername, int taskId)
     {
         matchService.CompleteTaskByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername, taskId);
