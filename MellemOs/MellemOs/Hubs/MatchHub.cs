@@ -58,7 +58,15 @@ public class MatchHub(MatchService matchService) : Hub
         return matchId;
     }
 
+    public async Task<List<GameTask>> GetTasksByPlayerName(string playername)
+    { 
+        return matchService.GetTasksByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
+    }
 
+    public async void CompleteTaskByPlayerName(string playername, int taskId)
+    {
+        matchService.CompleteTaskByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername, taskId);
+    }
 }
 
 public record PlayerPositionData
