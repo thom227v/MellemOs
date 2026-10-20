@@ -16,9 +16,18 @@ public class MinigameManager : MonoBehaviour
 
     public static MinigameManager Instance { get; private set; }
 
-    async void Awake()
+    async void Start()
     {
-        tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(PlayerPrefs.GetString("username"));
+        Debug.Log("GETTING ALL TASKS");
+        string username = PlayerPrefs.GetString("username");
+        Debug.Log($"I AM {username}");
+        tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
+        foreach(GameTask task in tasksToDo)
+        {
+            Debug.Log(task.Name);
+        }
+        Debug.Log("FINISHED PRINTING TASKS");
+
 
         if (Instance != null && Instance != this)
         {
