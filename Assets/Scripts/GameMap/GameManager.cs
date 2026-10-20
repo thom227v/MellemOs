@@ -19,14 +19,14 @@ public class GameManager : MonoBehaviour
     public GameObject entityPrefab;
     public MonoScript entityMoverScript;
 
-    private List<string> players = new List<string> { "Player1", "Player2", "Player3", "Skip" };
-    private Dictionary<string, int> voteCounts = GetEmptyVoteDictioaryFromPlayers(new string[] { "Player1", "Player2", "Player3", "Skip" });
-    public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(string[] players)
+    private Player[] players = new Player[] { new Player { Name = "Player1" }, new Player { Name = "Player2" }, new Player { Name = "Player3" }, new Player { Name = "Skip" } };
+    private Dictionary<string, int> voteCounts = GetEmptyVoteDictioaryFromPlayers(new Player[] { new Player { Name = "Player1" }, new Player { Name = "Player2" }, new Player { Name = "Player3" }, new Player { Name = "Skip" } });
+    public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
     {
         Dictionary<string, int> voteCounts = new();
         foreach (var player in players)
         {
-            voteCounts[player] = 0;
+            voteCounts[player.Name] = 0;
         }
         voteCounts["Skip"] = 0;
     return voteCounts;
@@ -35,21 +35,25 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    void Awake()
+    async void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
+            return;
         }
         else
         {
             Instance = this;
+
         }
+
+        this.players = await WSGameMap.Instance.GetPlayers();
 
         foreach (var player in players)
         {
             Vector3 randomPosition = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
-            CreateEntity(player, randomPosition);
+            CreateEntity(player.Name, randomPosition);
         }
     }
 
@@ -61,7 +65,7 @@ public class GameManager : MonoBehaviour
         VotingPanelContent.GetComponent<VotingPanel>().votingDataList = new List<VotingData>();
         VotingPanelContent.GetComponent<VotingPanel>().RenderVotes();
         VoteOptions.GetComponent<VoteOptions>().Setup(GetVoteOptions());
-        string text = $"Current Voted:  0/{players.Count}";
+        string text = $"Current Voted:  0/{players.Length}";
 
         foreach (var pair in voteCounts)
             text += $"\n{pair.Key}: {pair.Value}";
@@ -81,7 +85,7 @@ public class GameManager : MonoBehaviour
         }
 
         voteCounts[votedAgainst.text]++;
-        string text = $"Current Voted:  {voteCounts.Values.Sum()}/{players.Count}";
+        string text = $"Current Voted:  {voteCounts.Values.Sum()}/{players.Length}";
         foreach (var pair in voteCounts)
             text += $"\n{pair.Key}: {pair.Value}";
         votedStats.text = text;
@@ -117,8 +121,8 @@ public class GameManager : MonoBehaviour
         player.GetComponent<Movement>().isVoting = false;
         player.GetComponent<Movement>().hasVoted = false;
         VoteOptions.SetActive(true);
-        if (playerHighestVote != "Skip") players.Remove(playerHighestVote);
-        voteCounts = GetEmptyVoteDictioaryFromPlayers(players.ToArray());
+        if (playerHighestVote != "Skip") players = players.Where(p => p.Name != playerHighestVote).ToArray();
+        voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
 
     }
     private List<string> GetVoteOptions()
@@ -127,7 +131,7 @@ public class GameManager : MonoBehaviour
 
         foreach (var player in players)
         {
-            mockOptions.Add(player);
+            mockOptions.Add(player.Name);
         }
         return mockOptions;
     }
