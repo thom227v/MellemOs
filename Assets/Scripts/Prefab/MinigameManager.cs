@@ -111,4 +111,17 @@ public class MinigameManager : MonoBehaviour
         public string Name { get; set; }
         public bool Completed { get; set; } = false;
     }
+
+    public enum RoleEnum
+    {
+        Murderer,
+        Innocent,
+        Detective
+    }
+
+    public class Role
+    {
+        public RoleEnum RoleTitle { get; set; }
+        public int AbilityCooldown { get; set; }
+    }
 }
