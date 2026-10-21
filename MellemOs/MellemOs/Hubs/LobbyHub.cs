@@ -108,7 +108,7 @@ namespace MellemOs.Hubs
             if (lobby != null)
             {
                 lobby.GameState = Enums.GameState.Started;
-                int matchId =_matchService.CreateMatch(lobby.Name, lobby.Players.Select(p => p.Name).ToArray());
+                int matchId = _matchService.CreateMatch(lobby.Name, lobby.Players.Select(p => p.Name).ToArray());
                 return matchId;
 
                 //_lobbyService.ChangeLobby(lobby);

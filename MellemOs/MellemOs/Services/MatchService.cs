@@ -36,24 +36,9 @@ public class MatchService
     }
 
     private int _matchIdCounter;
-    private List<Match> Matches { get; set; } = new();
+    private List<Models.Match> Matches { get; set; } = new();
 
     public int CreateMatch(string lobbyName, string[] playersName)
-    {
-        var match = new Match(_matchIdCounter, lobbyName, playersName);
-        _matchIdCounter++;
-
-        foreach (Player player in match.Players)
-        {
-            if (murdererPlayer.Name == player.Name) { continue; }
-            if (detectivePlayer.Name == player.Name) { continue; }
-
-            player.TasksToDo = _taskService.GenerateRndTasks();
-            player.Role = new Role { RoleTitle = RoleEnum.Innocent, AbilityCooldown = 15 };
-        }
-    }
-
-    public void CreateMatch(string lobbyName, string[] playersName)
     {
         Models.Match match = new Models.Match(_matchIdCounter++, lobbyName, playersName);
 
@@ -66,7 +51,7 @@ public class MatchService
 
     public int GetMatchIdByPlayerName(string playerName)
     {
-        Match? match = Matches.Find(m => m.Players.Any(p => p.Name == playerName));
+        Models.Match? match = Matches.Find(m => m.Players.Any(p => p.Name == playerName));
         if (match == null)
         {
             throw new NotImplementedException();
