@@ -144,6 +144,26 @@ public class WSGameMap : MonoBehaviour
         return new List<MinigameManager.GameTask>();
     }
 
+    public async Task<Role> GetRoleByPlayerName(string playerName)
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            throw new Exception("NO Connection");
+        }
+        try
+        {
+            //Debug.Log("SendPlayerPosition: " + _connection.State);
+            Role role = await _connection.InvokeAsync<Role>("GetRoleByPlayerName", playerName);
+            return role;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to send player position: {ex}");
+        }
+        throw new Exception("NO ROLE");
+    }
+
     public async Task<Player[]> GetPlayers()
     {
         if (_connection == null || _connection.State != HubConnectionState.Connected)
