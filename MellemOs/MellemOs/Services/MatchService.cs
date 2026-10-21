@@ -19,9 +19,9 @@ public class MatchService
     {
         System.Random rnd = new System.Random();
 
-        List<Player> TempPlayers = (List<Player>)match.Players.Clone();
+        Player[] TempPlayers = (Player[])match.Players.Clone();
         Player murdererPlayer = match.Players[rnd.Next(0, TempPlayers.Count()-1)];
-        TempPlayers.Remove(murdererPlayer);
+        TempPlayers.ToList().Remove(murdererPlayer);
         Player detectivePlayer = match.Players[rnd.Next(0, TempPlayers.Count()-1)];
 
         foreach (Player player in match.Players)

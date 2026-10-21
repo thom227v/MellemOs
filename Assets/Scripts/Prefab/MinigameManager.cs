@@ -46,8 +46,8 @@ public class MinigameManager : MonoBehaviour
             Debug.Log(task.Name);
         }
 
-        //MinigameManager.Role role = await WSGameMap.Instance.GetRoleByPlayerName(username);
-
+        MinigameManager.Role role = await WSGameMap.Instance.GetRoleByPlayerName(username);
+        Debug.Log(role.RoleTitle);
 
         
 
