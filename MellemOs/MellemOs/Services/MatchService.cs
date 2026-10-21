@@ -109,4 +109,14 @@ public class MatchService
         }
         throw new NotImplementedException();
     }
+
+    public Player[] KillPlayer(int matchId, string playername)
+    {
+        Models.Match? match = GetMatchById(matchId);
+        if (match == null) { throw new NotImplementedException(); }
+        Player? player = GetPlayerInMatch(match, playername);
+        if (player == null) { throw new NotImplementedException(); }
+        player.IsAlive = false;
+        return match.Players;
+    }
 }

@@ -68,6 +68,12 @@ public class MatchHub(MatchService matchService) : Hub
         return matchService.GetRoleByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
 
+    public async Task<Player[]> KillPlayer(string playername)
+    {
+        var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+        return matchService.KillPlayer(matchId, playername);
+    }
+
     public async Task<Player[]> GetPlayers()
     {
         if (Context.Items["matchId"] is not int matchId)

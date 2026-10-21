@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject entityPrefab;
     public GameObject entityMoverScript;
 
-    private Player[] players = null;
+    public Player[] players = null;
     private Dictionary<string, int> voteCounts = null;
     public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
     {

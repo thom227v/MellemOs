@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -43,12 +44,18 @@ public class Movement : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        //Debug.Log("Inside zone");
         Keyboard kb = Keyboard.current;
         if (other.name == "ReportButton")
         {
             voteButton.SetActive(true);
         }
+
+        if (GameManager.Instance.players.Where(p => p.Name == other.name).Any())
+        {
+            RoleManager.Instance.EnableKillAbility(other.name);
+        }
+        RoleManager.Instance.DisableKillAbility();
+
 
         switch (other.name)
         {

@@ -114,6 +114,23 @@ public class WSService : MonoBehaviour
         }
     }
 
+    public async Task KillPlayer(string playerName)
+    {
+        if (_connection == null)
+        {
+            Debug.LogWarning("Connection is not established.");
+        }
+        try
+        {
+            List<Player> players = await _connection.InvokeAsync<List<Player>>("KillPlayer", playerName);
+            GameManager.Instance.players = players.ToArray();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to kill player: {ex}");
+        }
+    }
+
     public async Task<string> GetLobbyName()
     {
         if (_connection == null)
