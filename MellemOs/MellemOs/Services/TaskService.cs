@@ -36,9 +36,12 @@ namespace MellemOs.Services
         {
             System.Random rnd = new System.Random();
             List<GameTask> tasksToDo = new List<GameTask>();
-            for (int i = 0; i < 3; i++)
+            List<GameTask> tempTasks = new List<GameTask>(Tasks);
+            for (int i = 0; i < 3 ||tempTasks.Count() == 0; i++)
             {
-                tasksToDo.Add(Tasks[rnd.Next(0, Tasks.Count - 1)]);
+                int index = rnd.Next(0, tempTasks.Count - 1);
+                tasksToDo.Add(tempTasks[index]);
+                tempTasks.RemoveAt(index);
             }
             return tasksToDo;
         }

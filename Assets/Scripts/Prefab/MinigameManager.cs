@@ -44,7 +44,7 @@ public class MinigameManager : MonoBehaviour
 
     private void AddTask(string taskName)
     {
-        GameObject text = new GameObject("TaskText");
+        GameObject text = new GameObject(taskName);
         TextMeshProUGUI newText = text.AddComponent<TextMeshProUGUI>();
         newText.text = taskName;
         newText.enableAutoSizing = true;
@@ -119,6 +119,13 @@ public class MinigameManager : MonoBehaviour
         }
         Destroy(gameObject);
         minigameOpen = false;
+
+        GameObject obj = Tasks.transform.Find(task.Name).gameObject;
+        if (obj != null)
+        {
+            TMP_Text text = obj.GetComponent<TMP_Text>();
+            text.color = Color.green;
+        }
     }
 
     public void ClosedMinigame(GameObject gameObject)
