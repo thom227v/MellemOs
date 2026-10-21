@@ -32,7 +32,7 @@ public class MinigameManager : MonoBehaviour
         }
     }
 
-    public async void Setup()
+    public async System.Threading.Tasks.Task Setup()
     {
         Debug.Log("GETTING ALL TASKS");
         string username = GameInformation2.username;
@@ -41,10 +41,11 @@ public class MinigameManager : MonoBehaviour
         Debug.Log($"TASKS TO DO: {tasksToDo.Count()}");
         foreach(GameTask task in tasksToDo)
         {
-            GameObject text = new GameObject();
-            TMP_Text newText = text.AddComponent<TMP_Text>();
+            GameObject text = new GameObject("TaskText");
+            TextMeshProUGUI newText = text.AddComponent<TextMeshProUGUI>();
             newText.text = task.Name;
-            text.transform.parent = Tasks.transform;
+            newText.enableAutoSizing = true;
+            text.transform.SetParent(Tasks.transform, false);
 
             Debug.Log(task.Name);
         }
