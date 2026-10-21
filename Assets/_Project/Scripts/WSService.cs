@@ -123,7 +123,7 @@ public class WSService : MonoBehaviour
         }
         try
         {
-            string lobbyName = await _connection.InvokeAsync<string>("GetLobbyName", PlayerPrefs.GetString("username"));
+            string lobbyName = await _connection.InvokeAsync<string>("GetLobbyName", GameInformation2.username);
             return lobbyName;
         }
         catch (Exception ex)
@@ -141,7 +141,7 @@ public class WSService : MonoBehaviour
 
     public async Task JoinLobby(string lobbyName)
     {
-        string username = PlayerPrefs.GetString("username");
+        string username = GameInformation2.username;
         await _connection.InvokeAsync("JoinLobby", lobbyName, username);
     }
 
@@ -152,17 +152,18 @@ public class WSService : MonoBehaviour
 
     public async Task<string[]> GetPlayersInCurrentLobby()
     {
-        return await _connection.InvokeAsync<string[]>("GetPlayersInCurrentPlayerLobby", PlayerPrefs.GetString("username"));
+        return await _connection.InvokeAsync<string[]>("GetPlayersInCurrentPlayerLobby", GameInformation2.username);
     }
 
-    public async void StartGame(string lobbyName)
+    public async Task<int> StartGame(string lobbyName)
     {
-        await _connection.InvokeAsync("StartGame", lobbyName);
+        int matchId = await _connection.InvokeAsync<int>("StartGame", lobbyName);
+        return matchId;
     }
 
     public async void LeaveLobby()
     {
-        await _connection.InvokeAsync("LeaveLobby", PlayerPrefs.GetString("username"));
+        await _connection.InvokeAsync("LeaveLobby", GameInformation2.username);
     }
 }
 

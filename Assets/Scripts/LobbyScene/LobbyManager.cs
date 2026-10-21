@@ -84,7 +84,7 @@ public class LobbyManager : MonoBehaviour
             Debug.LogWarning("Lobby size must be a number and at least 2.");
             return;
         }
-        string username = PlayerPrefs.GetString("username");
+        string username = GameInformation2.username;
         await WSService.Instance.CreateLobby(lobbyName.text, size);
         await WSService.Instance.JoinLobby(lobbyName.text);
         LobbyWaitingMenu.SetActive(true);
