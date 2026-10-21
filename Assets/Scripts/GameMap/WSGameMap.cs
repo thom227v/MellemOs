@@ -144,7 +144,7 @@ public class WSGameMap : MonoBehaviour
         return new List<MinigameManager.GameTask>();
     }
 
-    public async Task<Role> GetRoleByPlayerName(string playerName)
+    public async Task<MinigameManager.Role> GetRoleByPlayerName(string playerName)
     {
         if (_connection == null || _connection.State != HubConnectionState.Connected)
         {
@@ -154,7 +154,7 @@ public class WSGameMap : MonoBehaviour
         try
         {
             //Debug.Log("SendPlayerPosition: " + _connection.State);
-            Role role = await _connection.InvokeAsync<Role>("GetRoleByPlayerName", playerName);
+            MinigameManager.Role role = await _connection.InvokeAsync<MinigameManager.Role>("GetRoleByPlayerName", playerName);
             return role;
         }
         catch (Exception ex)

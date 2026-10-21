@@ -33,11 +33,8 @@ public class MinigameManager : MonoBehaviour
 
     public async System.Threading.Tasks.Task Setup()
     {
-        Debug.Log("GETTING ALL TASKS");
         string username = GameInformation2.username;
-        Debug.Log($"I AM {username}");
         tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
-        Debug.Log($"TASKS TO DO: {tasksToDo.Count()}");
         foreach(GameTask task in tasksToDo)
         {
             GameObject text = new GameObject("TaskText");
@@ -48,7 +45,8 @@ public class MinigameManager : MonoBehaviour
 
             Debug.Log(task.Name);
         }
-        Debug.Log("FINISHED PRINTING TASKS");
+
+        //MinigameManager.Role role = await WSGameMap.Instance.GetRoleByPlayerName(username);
 
 
         
