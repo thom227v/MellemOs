@@ -192,9 +192,16 @@ public record Player
     public string[] Position { get; set; } = new string[2];
 }
 
+public enum RoleEnum
+{
+    Murderer,
+    Innocent,
+    Detective
+}
+
 public record Role
 {
-    public string Name { get; set; }
+    public RoleEnum RoleTitle { get; set; }
     public int AbilityCooldown { get; set; }
 }
 

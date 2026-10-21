@@ -62,7 +62,7 @@ public class MinigameManager : MonoBehaviour
             Debug.Log(task.Name);
         }
 
-        MinigameManager.Role role = await WSGameMap.Instance.GetRoleByPlayerName(username);
+        Role role = await WSGameMap.Instance.GetRoleByPlayerName(username);
 
         if (role.RoleTitle == RoleEnum.Murderer)
         {
@@ -132,18 +132,5 @@ public class MinigameManager : MonoBehaviour
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Completed { get; set; } = false;
-    }
-
-    public enum RoleEnum
-    {
-        Murderer,
-        Innocent,
-        Detective
-    }
-
-    public class Role
-    {
-        public RoleEnum RoleTitle { get; set; }
-        public int AbilityCooldown { get; set; }
     }
 }
