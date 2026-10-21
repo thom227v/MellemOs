@@ -1,8 +1,5 @@
-using System.Threading;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class DragWireExecutor : MonoBehaviour, IDragHandler
 {

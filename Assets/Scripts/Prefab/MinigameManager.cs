@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using TMPro.EditorUtilities;
 
 public class MinigameManager : MonoBehaviour
 {
