@@ -113,6 +113,9 @@ namespace MellemOs.Hubs
             {
                 lobby.GameState = Enums.GameState.Started;
                 int matchId = _matchService.CreateMatch(lobby.Name, lobby.Players.Select(p => p.Name).ToArray());
+                await Clients.Others.SendAsync("GameStarted", lobby.Name, matchId);
+
+
                 return matchId;
 
                 //_lobbyService.ChangeLobby(lobby);
@@ -140,6 +143,7 @@ namespace MellemOs.Hubs
                 if (player != null)
                 {
                     lobby.Players.Remove(player);
+
                     //_lobbyService.ChangeLobby(lobby);
                 }
             }

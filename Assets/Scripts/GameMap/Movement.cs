@@ -9,10 +9,46 @@ public class Movement : MonoBehaviour
     public bool hasVoted = false;
     public float speed = 4f;
     public GameObject voteButton;
+    private string thisName;
+    private (float, float) newPosition = (0f, 0f);
+
+    void Start()
+    {
+        if (WSGameMap.Instance != null)
+        {
+            WSGameMap.Instance.OnPlayerPositionReceived += OnPositionChanged;
+        }
+        else
+        {
+            Debug.LogError("WSGameMap.Instance is null. Cannot subscribe to OnPlayerPositionReceived.");
+        }
+
+    }
 
     void Update()
     {
+
+        if (newPosition != (0f, 0f))
+        {
+            transform.position = new Vector3(newPosition.Item1, newPosition.Item2, transform.position.z);
+            newPosition = (0f, 0f);
+            transform.hasChanged = false;
+        }
+
         Walk();
+    }
+
+    void OnPositionChanged(PlayerPositionData positionData)
+    {
+        Debug.Log("Position data received for player: " + positionData.PlayerId + " with position: (" + positionData.PositionX + ", " + positionData.PositionY + ")");
+        if (positionData.PlayerId == thisName)
+        {
+            newPosition = (positionData.PositionX, positionData.PositionY);
+        }
+        else
+        {
+            Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+        }
     }
 
     void Walk()

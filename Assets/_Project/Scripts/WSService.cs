@@ -12,6 +12,7 @@ public class WSService : MonoBehaviour
     private const string Hub = "hubs/lobby";
     private HubConnection _connection;
     public event Action<Lobbies> OnLobbiesReceived;
+    public event Action<string, int> OnGameStarted;
 
     public static WSService Instance { get; private set; }
 
@@ -25,13 +26,19 @@ public class WSService : MonoBehaviour
         _connection = new HubConnectionBuilder()
             .WithUrl(ServerAddress + Hub)
             .WithAutomaticReconnect()
-            .Build();
+         .Build();
 
         _connection.Closed += ex =>
         {
             Debug.LogError($"Closed: {ex}");
             return Task.CompletedTask;
         };
+
+        _connection.On("GameStarted", async (string lobbyName, int matchId) =>
+        {
+            Debug.Log("Game started event received.");
+            OnGameStarted?.Invoke(lobbyName, matchId);
+        });
 
         try
         {

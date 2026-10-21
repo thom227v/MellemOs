@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject votingPanel;
     public TMP_Text votedStats;
     public GameObject entityPrefab;
-    public GameObject entityMoverScript;
+    public EntityMover entityMoverScript;
 
     public Player[] players = null;
     private Dictionary<string, int> voteCounts = null;
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     async void Start()
     {
+
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
+        Application.runInBackground = true;
         await WSGameMap.Instance.Setup();
 
         if (WSGameMap.Instance == null) Debug.Log("WSGameMap.Instance is null");

@@ -17,7 +17,7 @@ public class MatchService
 
     private void AssignRoles(ref Models.Match match)
     {
-        System.Random rnd = new System.Random();
+        Random rnd = new Random();
 
         Player[] TempPlayers = (Player[])match.Players.Clone();
         Player murdererPlayer = match.Players[rnd.Next(0, TempPlayers.Count()-1)];
