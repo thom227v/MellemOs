@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
             Vector3 randomPosition = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
             CreateEntity(player.Name, randomPosition);
         }
+        MinigameManager.Instance.Setup();
     }
 
     public void ReportButtonTriggered()

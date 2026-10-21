@@ -20,12 +20,25 @@ public class MinigameManager : MonoBehaviour
 
     public static MinigameManager Instance { get; private set; }
 
-    async void Start()
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    public async void Setup()
     {
         Debug.Log("GETTING ALL TASKS");
         string username = GameInformation2.username;
         Debug.Log($"I AM {username}");
         tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
+        Debug.Log($"TASKS TO DO: {tasksToDo.Count()}");
         foreach(GameTask task in tasksToDo)
         {
             GameObject text = new GameObject();
@@ -38,14 +51,7 @@ public class MinigameManager : MonoBehaviour
         Debug.Log("FINISHED PRINTING TASKS");
 
 
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
+        
 
         minigames = new Dictionary<int, Canvas>()
         {

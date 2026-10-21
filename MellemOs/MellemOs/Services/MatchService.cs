@@ -27,8 +27,8 @@ public class MatchService
 
         foreach (Player player in match.Players)
         {
-            if (murdererPlayer.Name == player.Name) { continue; }
-            if (detectivePlayer.Name == player.Name) { continue; }
+            //if (murdererPlayer.Name == player.Name) { continue; }
+            //if (detectivePlayer.Name == player.Name) { continue; }
 
             player.TasksToDo = _taskService.GenerateRndTasks();
             player.Role = new Role { RoleTitle = RoleEnum.Innocent, AbilityCooldown = 15 };
