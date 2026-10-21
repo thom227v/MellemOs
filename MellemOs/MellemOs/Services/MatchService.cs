@@ -15,12 +15,6 @@ public class MatchService
         _taskService = taskService;
     }
 
-    private int _matchIdCounter = 1;
-    List<Models.Match> Matches { get; set; } = new()
-    {
-        new Models.Match(0, "Default Match", Array.Empty<string>()),
-    };
-
     private void AssignRoles(ref Models.Match match)
     {
         System.Random rnd = new System.Random();
@@ -41,6 +35,24 @@ public class MatchService
         }
     }
 
+    private int _matchIdCounter;
+    private List<Match> Matches { get; set; } = new();
+
+    public int CreateMatch(string lobbyName, string[] playersName)
+    {
+        var match = new Match(_matchIdCounter, lobbyName, playersName);
+        _matchIdCounter++;
+
+        foreach (Player player in match.Players)
+        {
+            if (murdererPlayer.Name == player.Name) { continue; }
+            if (detectivePlayer.Name == player.Name) { continue; }
+
+            player.TasksToDo = _taskService.GenerateRndTasks();
+            player.Role = new Role { RoleTitle = RoleEnum.Innocent, AbilityCooldown = 15 };
+        }
+    }
+
     public void CreateMatch(string lobbyName, string[] playersName)
     {
         Models.Match match = new Models.Match(_matchIdCounter++, lobbyName, playersName);
@@ -49,6 +61,17 @@ public class MatchService
 
         Matches.Add(match);
         Console.WriteLine($"Match created: {match.Name} with ID: {match.Id}");
+        return match.Id;
+    }
+
+    public int GetMatchIdByPlayerName(string playerName)
+    {
+        Match? match = Matches.Find(m => m.Players.Any(p => p.Name == playerName));
+        if (match == null)
+        {
+            throw new NotImplementedException();
+        }
+        return match.Id;
     }
 
     public Models.Match? GetMatchById(int matchId)

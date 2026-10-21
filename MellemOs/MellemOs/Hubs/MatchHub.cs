@@ -1,8 +1,6 @@
 using MellemOs.Models;
 using MellemOs.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 
 namespace MellemOs.Hubs;
 
@@ -11,6 +9,8 @@ public class MatchHub(MatchService matchService) : Hub
     public override async Task OnConnectedAsync()
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+        Console.WriteLine($"Client {Context.ConnectionId} is connecting to match {matchId}");
+
         Match? match =  matchService.GetMatchById(matchId);
         if (match == null)
         {
@@ -46,7 +46,7 @@ public class MatchHub(MatchService matchService) : Hub
         var positionY = playerPositionData.PositionY;
 
         Console.WriteLine($"Broadcasting player position for {playerId} in match {matchId}: ({positionX}, {positionY})");
-        await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerId, positionX, positionY);
+        await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerPositionData);
     }
 
     private static int GetMatchIdFromRoute(HttpContext? httpContext)
@@ -59,7 +59,7 @@ public class MatchHub(MatchService matchService) : Hub
     }
 
     public async Task<List<GameTask>> GetTasksByPlayerName(string playername)
-    { 
+    {
         return matchService.GetTasksByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
 
@@ -72,14 +72,27 @@ public class MatchHub(MatchService matchService) : Hub
     {
         if (Context.Items["matchId"] is not int matchId)
         {
-            throw new HubException("Match ID not found in context items");
+            Console.Write("Match ID not found in context items");
+            return null;
         }
-        Match match = matchService.GetMatchById(matchId) ?? throw new HubException("Match not found");
-        return match.Players;
+        Console.WriteLine("Trying to get match by id: " + matchId);
+        Match? match = matchService.GetMatchById(matchId);
+        if (match == null)
+        {
+            Console.WriteLine("actual id: " + matchService.GetMatchById(1));
+            Console.WriteLine("ERROR: match not found");
+        }
+        else
+        {
+            return match.Players;
+        }
+        return null;
     }
     public async void CompleteTaskByPlayerName(string playername, int taskId)
     {
-        matchService.CompleteTaskByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername, taskId);
+        var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+        Console.WriteLine("matchId" + matchId);
+        matchService.CompleteTaskByPlayer(matchId, playername, taskId);
     }
 }
 

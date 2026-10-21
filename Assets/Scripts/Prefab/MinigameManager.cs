@@ -22,7 +22,8 @@ public class MinigameManager : MonoBehaviour
 
     async void Start()
     {
-        string username = PlayerPrefs.GetString("username");
+        Debug.Log("GETTING ALL TASKS");
+        string username = GameInformation2.username;
         Debug.Log($"I AM {username}");
         tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
         foreach(GameTask task in tasksToDo)
@@ -82,7 +83,7 @@ public class MinigameManager : MonoBehaviour
     {
         Debug.Log($"Completed {id}");
         // SEND TING TO THE TING TING SERVER BOOM BOOM
-        WSGameMap.Instance.CompleteTaskById(PlayerPrefs.GetString("username"), id);
+        WSGameMap.Instance.CompleteTaskById(GameInformation2.username, id);
         GameTask? task = tasksToDo.FirstOrDefault<GameTask>(l => l.Id == id);
         if (task != null)
         {

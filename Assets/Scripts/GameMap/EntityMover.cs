@@ -1,11 +1,19 @@
+using System;
 using UnityEngine;
 
 public class EntityMover : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private string thisName;
+    private (float, float) newPosition = (0f, 0f);
     void Start()
     {
+        thisName = gameObject.name;
         Debug.Log("EntityMover script is attached to: " + gameObject.name);
+
+        if (WSGameMap.Instance != null)
+        {
+            WSGameMap.Instance.OnPlayerPositionReceived += OnPositionChanged;
+        }
 
     }
 
@@ -17,20 +25,24 @@ public class EntityMover : MonoBehaviour
             OnMoved();
         }
 
- 
-        if (WSGameMap.Instance != null)
+        if (newPosition != (0f, 0f))
         {
-            WSGameMap.Instance.OnPlayerPositionReceived += OnPositionChanged;
+            transform.position = new Vector3(newPosition.Item1, newPosition.Item2, transform.position.z);
+            newPosition = (0f, 0f);
+            transform.hasChanged = false;
         }
     }
 
     void OnPositionChanged(PlayerPositionData positionData)
     {
-        if (positionData.PlayerId == gameObject.name)
+        if (positionData.PlayerId == thisName)
         {
-            transform.position = new Vector3(positionData.PositionX, positionData.PositionY, transform.position.z);
+            newPosition = (positionData.PositionX, positionData.PositionY);
         }
-        // Handle position change
+        else
+        {
+            Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+        }
     }
 
     void OnMoved()

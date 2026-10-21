@@ -99,7 +99,7 @@ namespace MellemOs.Hubs
             }
         }
 
-        public async void StartGame(string lobbyName)
+        public async Task<int?> StartGame(string lobbyName)
         {
             Lobbies lobbies = _lobbyService.GetLobbies();
 
@@ -108,10 +108,13 @@ namespace MellemOs.Hubs
             if (lobby != null)
             {
                 lobby.GameState = Enums.GameState.Started;
-                _matchService.CreateMatch(lobby.Name, lobby.Players.Select(p => p.Name).ToArray());
+                int matchId =_matchService.CreateMatch(lobby.Name, lobby.Players.Select(p => p.Name).ToArray());
+                return matchId;
 
                 //_lobbyService.ChangeLobby(lobby);
             }
+
+            return null;
         }
 
         public async Task<bool> UsernameCheck(string username)
