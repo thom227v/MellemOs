@@ -88,7 +88,7 @@ public class MinigameManager : MonoBehaviour
     public void CompletedMinigame(int id, GameObject gameObject)
     {
         Debug.Log($"Completed {id}");
-        // SEND TING TO THE TING TING SERVER BOOM BOOM
+        // SEND TING TO THE TUNG TUNG TUNG SAHUR SERVER BOOM BOOM
         WSGameMap.Instance.CompleteTaskById(GameInformation2.username, id);
         GameTask? task = tasksToDo.FirstOrDefault<GameTask>(l => l.Id == id);
         if (task != null)
