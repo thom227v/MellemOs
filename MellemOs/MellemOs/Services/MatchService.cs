@@ -19,16 +19,23 @@ public class MatchService
     {
         System.Random rnd = new System.Random();
 
-        Player murdererPlayer = match.Players[rnd.Next(0, match.Players.Length)];
-        murdererPlayer.Role = new Role { RoleTitle = RoleEnum.Murderer, AbilityCooldown = 15 };
-
-        Player detectivePlayer = match.Players[rnd.Next(0, match.Players.Length)];
-        detectivePlayer.Role = new Role { RoleTitle = RoleEnum.Detective, AbilityCooldown = 15 };
+        List<Player> TempPlayers = (List<Player>)match.Players.Clone();
+        Player murdererPlayer = match.Players[rnd.Next(0, TempPlayers.Length)];
+        TempPlayers.Remove(murdererPlayer);
+        Player detectivePlayer = match.Players[rnd.Next(0, TempPlayers.Length)];
 
         foreach (Player player in match.Players)
         {
-            //if (murdererPlayer.Name == player.Name) { continue; }
-            //if (detectivePlayer.Name == player.Name) { continue; }
+            if (murdererPlayer.Name == player.Name) 
+            {
+                player.Role = new Role { RoleTitle = RoleEnum.Murderer, AbilityCooldown = 15 };
+                continue;
+            }
+            if (detectivePlayer.Name == player.Name)
+            {
+                player.Role = new Role { RoleTitle = RoleEnum.Detective, AbilityCooldown = 15 };
+                continue;
+            }
 
             player.TasksToDo = _taskService.GenerateRndTasks();
             player.Role = new Role { RoleTitle = RoleEnum.Innocent, AbilityCooldown = 15 };
