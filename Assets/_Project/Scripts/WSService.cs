@@ -55,7 +55,7 @@ public class WSService : MonoBehaviour
         }
         try
         {
-            bool isUsernameTaken = _connection.InvokeAsync<bool>("UsernameCheck", username).Result;
+            bool isUsernameTaken = await _connection.InvokeAsync<bool>("UsernameCheck", username);
             return isUsernameTaken;
         }
         catch (Exception ex)
@@ -76,7 +76,7 @@ public class WSService : MonoBehaviour
         Debug.Log($"Current connection state: {state}");
     }
 
-    public Lobbies GetLobbies()
+    public async Task<Lobbies> GetLobbies()
     {
         if (_connection == null)
         {
@@ -85,7 +85,7 @@ public class WSService : MonoBehaviour
         }
         try
         {
-            Lobbies lobbies = _connection.InvokeAsync<Lobbies>("GetLobbies").Result;
+            Lobbies lobbies = await _connection.InvokeAsync<Lobbies>("GetLobbies");
             return lobbies;
         }
         catch (Exception ex)
@@ -95,7 +95,7 @@ public class WSService : MonoBehaviour
         }
     }
 
-    public Lobbies GetLobbiesNotStarted()
+    public async Task<Lobbies> GetLobbiesNotStarted()
     {
         if (_connection == null)
         {
@@ -104,7 +104,7 @@ public class WSService : MonoBehaviour
         }
         try
         {
-            Lobbies lobbies = _connection.InvokeAsync<Lobbies>("GetLobbiesNotStarted").Result;
+            Lobbies lobbies = await _connection.InvokeAsync<Lobbies>("GetLobbiesNotStarted");
             return lobbies;
         }
         catch (Exception ex)
@@ -114,7 +114,7 @@ public class WSService : MonoBehaviour
         }
     }
 
-    public string GetLobbyName()
+    public async Task<string> GetLobbyName()
     {
         if (_connection == null)
         {
@@ -123,8 +123,8 @@ public class WSService : MonoBehaviour
         }
         try
         {
-            var lobbyName = _connection.InvokeAsync<string>("GetLobbyName", PlayerPrefs.GetString("username"));
-            return lobbyName.Result;
+            string lobbyName = await _connection.InvokeAsync<string>("GetLobbyName", PlayerPrefs.GetString("username"));
+            return lobbyName;
         }
         catch (Exception ex)
         {
@@ -136,28 +136,16 @@ public class WSService : MonoBehaviour
     public async void Start()
     {
         await CreateConnection();
-        try
-        {
-            _connection.On<Lobbies>("GetLobbies", (lobbies) =>
-            {
-                OnLobbiesReceived?.Invoke(lobbies);
-            });
-            await _connection.StartAsync();
-            Debug.Log("Start; " + _connection.State);
-        }
-        catch (Exception e)
-        {
-            Debug.Log("error" + e.Message);
-        }
+        GetLobbies();
     }
 
-    public async void JoinLobby(string lobbyName)
+    public async Task JoinLobby(string lobbyName)
     {
         string username = PlayerPrefs.GetString("username");
         await _connection.InvokeAsync("JoinLobby", lobbyName, username);
     }
 
-    public async void CreateLobby(string lobbyName, int size)
+    public async Task CreateLobby(string lobbyName, int size)
     {
         await _connection.InvokeAsync("CreateLobby", lobbyName, size);
     }

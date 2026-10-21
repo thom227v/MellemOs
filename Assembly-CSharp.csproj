@@ -65,7 +65,6 @@
     <Compile Include="Assets\Scripts\LobbyScene\PlayGameButton.cs" />
     <Compile Include="Assets\Scripts\GameMap\VotingPanel.cs" />
     <Compile Include="Assets\Scripts\GameMap\VoteOptions.cs" />
-    <Compile Include="Assets\Scripts\LobbyScene\LobbyWaiting.cs" />
     <Compile Include="Assets\Scripts\Prefab\MinigameManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="Assets\Scripts\GameMap\Movement.cs" />
     <Compile Include="Assets\Scripts\Prefab\RedLightMinigame.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\LobbyScene\LobbyManager.cs" />
     <Compile Include="Assets\Scripts\GameMap\TestingHelper.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\_Project\Scripts\BroadcastService.cs" />
