@@ -76,13 +76,17 @@ namespace MellemOs.Hubs
 
         public async Task CreateLobby(string lobbyName, int size)
         {
-            Lobby newLobby = new Lobby()
+            Lobby? existingLobby = _lobbyService.GetLobbyByName(lobbyName);
+            if (existingLobby == null)
             {
-                Name = lobbyName,
-                MaxPlayers = size,
-                GameState = Enums.GameState.NotStarted
-            };
-            _lobbyService.AddLobby(newLobby);
+                Lobby newLobby = new Lobby()
+                {
+                    Name = lobbyName,
+                    MaxPlayers = size,
+                    GameState = Enums.GameState.NotStarted
+                };
+                _lobbyService.AddLobby(newLobby);
+            }
         }
 
         public async Task<string[]> GetPlayersInCurrentPlayerLobby(string playername)

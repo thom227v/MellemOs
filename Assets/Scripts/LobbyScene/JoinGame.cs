@@ -12,7 +12,7 @@ public class JoinGame : MonoBehaviour
     void Start()
     {
         gameObject.transform.Find("LobbyLabel").GetComponent<TMP_Text>().SetText(LobbyNameText);
-        gameObject.GetComponentInChildren<Button>().onClick.AddListener(TaskOnClick);
+        gameObject.GetComponentInChildren<Button>().onClick.AddListener(() => LobbyManager.Instance.TaskOnClick(LobbyName));
     }
 
     public JoinGame Init(GameObject lobbyMenu, GameObject lobbyWaitingMenu, string text, string lobbyName)
@@ -24,11 +24,5 @@ public class JoinGame : MonoBehaviour
         return this;
     }
 
-    private async void TaskOnClick()
-    {
-        WSService.Instance.JoinLobby(LobbyName);
-        await PlayersInLobbyWaiting.Instance.UpdatePlayers();
-        LobbyMenu.SetActive(false);
-        LobbyWaitingMenu.SetActive(true);
-    }
+  
 }

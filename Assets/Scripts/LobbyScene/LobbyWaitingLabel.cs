@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class LobbyWaitingLabel : MonoBehaviour
 {
-    void Start()
+    async void OnEnable()
     {
-        gameObject.GetComponent<TMP_Text>().text = WSService.Instance.GetLobbyName();
+        gameObject.GetComponent<TMP_Text>().text = await WSService.Instance.GetLobbyName();
     }
 }
