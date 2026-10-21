@@ -11,9 +11,10 @@ public class StartGame : MonoBehaviour
         gameObject.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(StartGameButton);
     }
 
-    private void StartGameButton()
+    private async void StartGameButton()
     {
-        WSService.Instance.StartGame(lobbyName.text);
+        int matchId = await WSService.Instance.StartGame(lobbyName.text);
+        GameInformation2.matchId = matchId;
         SceneManager.LoadScene("GAMEMAP");
     }
 }

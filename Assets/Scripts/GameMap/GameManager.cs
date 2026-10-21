@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    async void Awake()
+    async void Start()
     {
         if (Instance != null && Instance != this)
         {
@@ -45,13 +45,24 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-
         }
 
-        this.players = await WSGameMap.Instance.GetPlayers();
+        await WSGameMap.Instance.Setup();
+
+        if (WSGameMap.Instance == null) Debug.Log("WSGameMap.Instance is null");
+        Debug.Log("Getting players from WSGameMap.Instance");
+        Player[]? players = await WSGameMap.Instance.GetPlayers();
+        if (players == null || players.Length == 0)
+        {
+            Debug.LogError("No players found.");
+            return;
+        }
+        this.players = players;
 
         foreach (var player in players)
         {
+            if (player.Name == GameInformation2.username) continue;
+            Debug.Log("username: " + GameInformation2.username + " player.Name: " + player.Name);
             Vector3 randomPosition = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
             CreateEntity(player.Name, randomPosition);
         }

@@ -33,7 +33,7 @@ public class Movement : MonoBehaviour
         {
             PlayerPositionData positionData = new PlayerPositionData
             {
-                PlayerId = PlayerPrefs.GetString("username"),
+                PlayerId = GameInformation2.username,
                 PositionX = transform.position.x,
                 PositionY = transform.position.y
             };
