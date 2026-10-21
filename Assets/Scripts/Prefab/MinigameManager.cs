@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using TMPro.EditorUtilities;
 
 public class MinigameManager : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class MinigameManager : MonoBehaviour
     public Canvas RedLightGame;
     public Canvas NumberMinigame;
     public Canvas ColorMinigame;
+    public GameObject Tasks;
+    public TMP_Text RoleExpose;
     public bool minigameOpen = false;
     private Dictionary<int, Canvas> minigames = new Dictionary<int, Canvas>();
     private List<GameTask> tasksToDo = new List<GameTask>();
@@ -18,12 +22,16 @@ public class MinigameManager : MonoBehaviour
 
     async void Start()
     {
-        Debug.Log("GETTING ALL TASKS");
         string username = PlayerPrefs.GetString("username");
         Debug.Log($"I AM {username}");
         tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
         foreach(GameTask task in tasksToDo)
         {
+            GameObject text = new GameObject();
+            TMP_Text newText = text.AddComponent<TMP_Text>();
+            newText.text = task.Name;
+            text.transform.parent = Tasks.transform;
+
             Debug.Log(task.Name);
         }
         Debug.Log("FINISHED PRINTING TASKS");

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using MellemOs.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using MellemOs.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using System.Text.RegularExpressions;
 
 namespace MellemOs.Services;
 
@@ -15,37 +16,55 @@ public class MatchService
     }
 
     private int _matchIdCounter = 1;
-    List<Match> Matches { get; set; } = new()
+    List<Models.Match> Matches { get; set; } = new()
     {
-        new Match(0, "Default Match", Array.Empty<string>()),
+        new Models.Match(0, "Default Match", Array.Empty<string>()),
     };
+
+    private void AssignRoles(ref Models.Match match)
+    {
+        System.Random rnd = new System.Random();
+
+        Player murdererPlayer = match.Players[rnd.Next(0, match.Players.Length)];
+        murdererPlayer.Role = new Role { RoleTitle = RoleEnum.Murderer, AbilityCooldown = 15 };
+
+        Player detectivePlayer = match.Players[rnd.Next(0, match.Players.Length)];
+        detectivePlayer.Role = new Role { RoleTitle = RoleEnum.Detective, AbilityCooldown = 15 };
+
+        foreach (Player player in match.Players)
+        {
+            if (murdererPlayer.Name == player.Name) { continue; }
+            if (detectivePlayer.Name == player.Name) { continue; }
+
+            player.TasksToDo = _taskService.GenerateRndTasks();
+            player.Role = new Role { RoleTitle = RoleEnum.Innocent, AbilityCooldown = 15 };
+        }
+    }
 
     public void CreateMatch(string lobbyName, string[] playersName)
     {
-        var match = new Match(_matchIdCounter++, lobbyName, playersName);
+        Models.Match match = new Models.Match(_matchIdCounter++, lobbyName, playersName);
 
-        foreach(Player player in match.Players)
-        {
-            player.TasksToDo = _taskService.GenerateRndTasks();
-        }
+        AssignRoles(ref match);
 
         Matches.Add(match);
         Console.WriteLine($"Match created: {match.Name} with ID: {match.Id}");
     }
 
-    public Match? GetMatchById(int matchId)
+    public Models.Match? GetMatchById(int matchId)
     {
-        var match = Matches.Find(m => m.Id == matchId);
-        if (match == null)
-        {
-            return null;
-        }
-        return match;
+        return Matches.Find(m => m.Id == matchId);
+    }
+
+    public Player? GetPlayerInMatch(Models.Match? match, string playerName)
+    {
+        if (match == null) return null;
+        return match.Players.FirstOrDefault(l => l.Name == playerName);
     }
 
     public List<GameTask> GetTasksByPlayer(int matchId, string playerName)
     {
-        Match? match = Matches.Find(m => m.Id == matchId);
+        Models.Match? match = GetMatchById(matchId);
         if (match == null) { throw new NotImplementedException(); }
         Player? player = match.Players.FirstOrDefault(l => l.Name == playerName);
         if (player == null) { throw new NotImplementedException(); }
@@ -54,14 +73,25 @@ public class MatchService
 
     public void CompleteTaskByPlayer(int matchId, string playerName, int taskId)
     {
-        Match? match = Matches.Find(m => m.Id == matchId);
+        Models.Match? match = GetMatchById(matchId);
         if (match == null) { throw new NotImplementedException(); }
-        Player? player = match.Players.FirstOrDefault(l => l.Name == playerName);
+        Player? player = GetPlayerInMatch(match, playerName);
         if (player == null) { throw new NotImplementedException(); }
         GameTask? task = player.TasksToDo.FirstOrDefault(l => l.Id == taskId);
         if (task != null)
         {
             task.Completed = true;
         }
+    }
+
+    public RoleEnum GetRoleByPlayer(int matchId, string playerName)
+    {
+        Models.Match? match = GetMatchById(matchId);
+        Player? player = GetPlayerInMatch(match, playerName);
+        if (player != null && player.Role != null)
+        {
+            return player.Role.RoleTitle;
+        }
+        throw new NotImplementedException();
     }
 }
