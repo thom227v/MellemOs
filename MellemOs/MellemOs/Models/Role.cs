@@ -2,7 +2,7 @@
 {
     public class Role
     {
-        public required string Name { get; set; }
+        public required RoleEnum RoleTitle { get; set; }
         public int AbilityCooldown { get; set; }
     }
 }

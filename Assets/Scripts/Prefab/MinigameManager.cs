@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using TMPro.EditorUtilities;
 
 public class MinigameManager : MonoBehaviour
 {
@@ -10,25 +12,16 @@ public class MinigameManager : MonoBehaviour
     public Canvas RedLightGame;
     public Canvas NumberMinigame;
     public Canvas ColorMinigame;
+    public GameObject Tasks;
+    public TMP_Text RoleExpose;
     public bool minigameOpen = false;
     private Dictionary<int, Canvas> minigames = new Dictionary<int, Canvas>();
     private List<GameTask> tasksToDo = new List<GameTask>();
 
     public static MinigameManager Instance { get; private set; }
 
-    async void Start()
+    void Awake()
     {
-        Debug.Log("GETTING ALL TASKS");
-        string username = GameInformation2.username;
-        Debug.Log($"I AM {username}");
-        tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
-        foreach(GameTask task in tasksToDo)
-        {
-            Debug.Log(task.Name);
-        }
-        Debug.Log("FINISHED PRINTING TASKS");
-
-
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
@@ -37,6 +30,29 @@ public class MinigameManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    public async System.Threading.Tasks.Task Setup()
+    {
+        Debug.Log("GETTING ALL TASKS");
+        string username = GameInformation2.username;
+        Debug.Log($"I AM {username}");
+        tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
+        Debug.Log($"TASKS TO DO: {tasksToDo.Count()}");
+        foreach(GameTask task in tasksToDo)
+        {
+            GameObject text = new GameObject("TaskText");
+            TextMeshProUGUI newText = text.AddComponent<TextMeshProUGUI>();
+            newText.text = task.Name;
+            newText.enableAutoSizing = true;
+            text.transform.SetParent(Tasks.transform, false);
+
+            Debug.Log(task.Name);
+        }
+        Debug.Log("FINISHED PRINTING TASKS");
+
+
+        
 
         minigames = new Dictionary<int, Canvas>()
         {

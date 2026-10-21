@@ -37,7 +37,7 @@ public class WSGameMap : MonoBehaviour
         {
             _connection.On<PlayerPositionData>("PlayerPosition", (playerPositionData) =>
             {
-                Debug.Log("Invoked!!!");
+                //Debug.Log("Invoked!!!");
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
             Debug.Log("Start; " + _connection.State);
