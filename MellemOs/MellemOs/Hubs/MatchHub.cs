@@ -63,7 +63,7 @@ public class MatchHub(MatchService matchService) : Hub
         return matchService.GetTasksByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
 
-    public async Task<RoleEnum> GetRoleByPlayerName(string playername)
+    public async Task<Role> GetRoleByPlayerName(string playername)
     {
         return matchService.GetRoleByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }

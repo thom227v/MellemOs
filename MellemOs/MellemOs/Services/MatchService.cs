@@ -92,13 +92,13 @@ public class MatchService
         }
     }
 
-    public RoleEnum GetRoleByPlayer(int matchId, string playerName)
+    public Role GetRoleByPlayer(int matchId, string playerName)
     {
         Models.Match? match = GetMatchById(matchId);
         Player? player = GetPlayerInMatch(match, playerName);
         if (player != null && player.Role != null)
         {
-            return player.Role.RoleTitle;
+            return player.Role;
         }
         throw new NotImplementedException();
     }
