@@ -21,8 +21,8 @@ public class MatchService
 
         Player[] TempPlayers = (Player[])match.Players.Clone();
         Player murdererPlayer = match.Players[rnd.Next(0, TempPlayers.Count()-1)];
-        TempPlayers.ToList().Remove(murdererPlayer);
-        Player detectivePlayer = match.Players[rnd.Next(0, TempPlayers.Count()-1)];
+        //TempPlayers.ToList().Remove(murdererPlayer);
+        //Player detectivePlayer = match.Players[rnd.Next(0, TempPlayers.Count()-1)];
 
         foreach (Player player in match.Players)
         {
@@ -31,11 +31,11 @@ public class MatchService
                 player.Role = new Role { RoleTitle = RoleEnum.Murderer, AbilityCooldown = 15 };
                 continue;
             }
-            if (detectivePlayer.Name == player.Name)
-            {
-                player.Role = new Role { RoleTitle = RoleEnum.Detective, AbilityCooldown = 15 };
-                continue;
-            }
+            //if (detectivePlayer.Name == player.Name)
+            //{
+            //    player.Role = new Role { RoleTitle = RoleEnum.Detective, AbilityCooldown = 15 };
+            //    continue;
+            //}
 
             player.TasksToDo = _taskService.GenerateRndTasks();
             player.Role = new Role { RoleTitle = RoleEnum.Innocent, AbilityCooldown = 15 };
