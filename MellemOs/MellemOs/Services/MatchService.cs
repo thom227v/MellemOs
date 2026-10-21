@@ -14,15 +14,13 @@ public class MatchService
         _taskService = taskService;
     }
 
-    private int _matchIdCounter = 1;
-    List<Match> Matches { get; set; } = new()
-    {
-        new Match(0, "Default Match", Array.Empty<string>()),
-    };
+    private int _matchIdCounter;
+    private List<Match> Matches { get; set; } = new();
 
-    public void CreateMatch(string lobbyName, string[] playersName)
+    public int CreateMatch(string lobbyName, string[] playersName)
     {
-        var match = new Match(_matchIdCounter++, lobbyName, playersName);
+        var match = new Match(_matchIdCounter, lobbyName, playersName);
+        _matchIdCounter++;
 
         foreach(Player player in match.Players)
         {
@@ -31,6 +29,17 @@ public class MatchService
 
         Matches.Add(match);
         Console.WriteLine($"Match created: {match.Name} with ID: {match.Id}");
+        return match.Id;
+    }
+
+    public int GetMatchIdByPlayerName(string playerName)
+    {
+        Match? match = Matches.Find(m => m.Players.Any(p => p.Name == playerName));
+        if (match == null)
+        {
+            throw new NotImplementedException();
+        }
+        return match.Id;
     }
 
     public Match? GetMatchById(int matchId)

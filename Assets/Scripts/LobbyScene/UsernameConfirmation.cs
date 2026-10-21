@@ -28,7 +28,8 @@ public class UsernameConfirmation : MonoBehaviour
             Debug.LogWarning("Username is already taken.");
             return;
         }
-        PlayerPrefs.SetString("username", username.text);
+        Debug.Log("Username confirmed: " + username.text);
+        GameInformation2.username = username.text;
         LobbyMenu.SetActive(true);
         UsernameMenu.SetActive(false);
     }
