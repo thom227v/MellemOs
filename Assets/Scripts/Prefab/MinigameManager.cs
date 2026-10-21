@@ -1,8 +1,11 @@
-using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TMPro;
+using UnityEngine;
+using static MinigameManager;
 
 public class MinigameManager : MonoBehaviour
 {
@@ -31,27 +34,46 @@ public class MinigameManager : MonoBehaviour
         }
     }
 
+    IEnumerator ShowRole(string roleTitle)
+    {
+        RoleExpose.text = $"YOU ARE: {roleTitle}";
+        RoleExpose.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        RoleExpose.gameObject.SetActive(false);
+    }
+
+    private void AddTask(string taskName)
+    {
+        GameObject text = new GameObject(taskName);
+        TextMeshProUGUI newText = text.AddComponent<TextMeshProUGUI>();
+        newText.text = taskName;
+        newText.enableAutoSizing = true;
+        text.transform.SetParent(Tasks.transform, false);
+    }
+
     public async System.Threading.Tasks.Task Setup()
     {
-        Debug.Log("GETTING ALL TASKS");
         string username = GameInformation2.username;
-        Debug.Log($"I AM {username}");
         tasksToDo = await WSGameMap.Instance.GetTasksByPlayerName(username);
-        Debug.Log($"TASKS TO DO: {tasksToDo.Count()}");
         foreach(GameTask task in tasksToDo)
         {
-            GameObject text = new GameObject("TaskText");
-            TextMeshProUGUI newText = text.AddComponent<TextMeshProUGUI>();
-            newText.text = task.Name;
-            newText.enableAutoSizing = true;
-            text.transform.SetParent(Tasks.transform, false);
+            AddTask(task.Name);
 
             Debug.Log(task.Name);
         }
-        Debug.Log("FINISHED PRINTING TASKS");
 
+        Role role = await WSGameMap.Instance.GetRoleByPlayerName(username);
 
-        
+        if (role.RoleTitle == RoleEnum.Murderer)
+        {
+            AddTask("KILL ALL PLAYERS");
+        }
+        else if(role.RoleTitle == RoleEnum.Detective)
+        {
+            AddTask("FIND THE MURDERER");
+        }
+
+        StartCoroutine(ShowRole(role.RoleTitle.ToString()));
 
         minigames = new Dictionary<int, Canvas>()
         {
@@ -97,6 +119,13 @@ public class MinigameManager : MonoBehaviour
         }
         Destroy(gameObject);
         minigameOpen = false;
+
+        GameObject obj = Tasks.transform.Find(task.Name).gameObject;
+        if (obj != null)
+        {
+            TMP_Text text = obj.GetComponent<TMP_Text>();
+            text.color = Color.green;
+        }
     }
 
     public void ClosedMinigame(GameObject gameObject)
@@ -110,18 +139,5 @@ public class MinigameManager : MonoBehaviour
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Completed { get; set; } = false;
-    }
-
-    public enum RoleEnum
-    {
-        Murderer,
-        Innocent,
-        Detective
-    }
-
-    public class Role
-    {
-        public RoleEnum RoleTitle { get; set; }
-        public int AbilityCooldown { get; set; }
     }
 }
