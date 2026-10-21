@@ -17,10 +17,10 @@ public class GameManager : MonoBehaviour
     public GameObject votingPanel;
     public TMP_Text votedStats;
     public GameObject entityPrefab;
-    public MonoScript entityMoverScript;
+    public GameObject entityMoverScript;
 
-    private Player[] players = new Player[] { new Player { Name = "Player1" }, new Player { Name = "Player2" }, new Player { Name = "Player3" }, new Player { Name = "Skip" } };
-    private Dictionary<string, int> voteCounts = GetEmptyVoteDictioaryFromPlayers(new Player[] { new Player { Name = "Player1" }, new Player { Name = "Player2" }, new Player { Name = "Player3" }, new Player { Name = "Skip" } });
+    private Player[] players = null;
+    private Dictionary<string, int> voteCounts = null;
     public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
     {
         Dictionary<string, int> voteCounts = new();
