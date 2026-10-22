@@ -102,7 +102,7 @@ public class MatchHub(MatchService matchService) : Hub
         }
         return null;
     }
-    public void CompleteTaskByPlayerName(string playername, int taskId)
+    public async void CompleteTaskByPlayerName(string playername, int taskId)
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
         Console.WriteLine("matchId" + matchId);

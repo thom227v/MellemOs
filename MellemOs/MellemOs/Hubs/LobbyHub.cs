@@ -136,7 +136,7 @@ namespace MellemOs.Hubs
             return isUsernameTaken;
         }
 
-        public void LeaveLobby(string username)
+        public async void LeaveLobby(string username)
         {
             Lobbies lobbies = _lobbyService.GetLobbies();
 
