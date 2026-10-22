@@ -26,6 +26,7 @@ public class LobbyManager : MonoBehaviour
         return playerNames;
     }
 
+
     public void LobbiesReceived(Lobbies lobbies)
     {
         foreach (Transform child in CreateLobbies.transform)
@@ -42,7 +43,7 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public async Task UpdatePlayers()
+        public async Task UpdatePlayers()
     {
         string[] playersNames = await WSService.Instance.GetPlayersInCurrentLobby();
         CreatePlayers(playersNames);
