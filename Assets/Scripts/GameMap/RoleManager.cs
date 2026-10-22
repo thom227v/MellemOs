@@ -8,6 +8,7 @@ public class RoleManager : MonoBehaviour
     public GameObject killButton;
     public static RoleManager Instance { get; private set; }
     private string targetPlayerName;
+    public GameObject DeadPlayerPrefab;
 
     private void Awake()
     {
@@ -41,6 +42,9 @@ public class RoleManager : MonoBehaviour
     private async Task KillPlayer(string playerName)
     {
         await WSGameMap.Instance.KillPlayer(playerName);
+        GameObject playerObject = GameObject.Find(playerName);
+        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.identity);
+        deadPlayer.name = playerName + " (Dead)";
         DisableKillAbility();
     }
 }
