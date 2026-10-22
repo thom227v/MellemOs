@@ -97,7 +97,8 @@ public class WSGameMap : MonoBehaviour
         }
         try
         {
-            await _connection.InvokeAsync("FinishGame", playersWon);
+            Debug.Log("SENDING FINISH GAME");
+            bool finishedCorrect = await _connection.InvokeAsync<bool>("FinishGame", playersWon);
             Debug.Log("FinishMatch invoked successfully.");
         }
         catch (Exception ex)
