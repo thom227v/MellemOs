@@ -48,6 +48,24 @@ public class WSGameMap : MonoBehaviour
         }
     }
 
+    public async Task KillPlayer(string playerName)
+    {
+        if (_connection == null)
+        {
+            Debug.LogWarning("Connection is not established.");
+        }
+        try
+        {
+            List<Player> players = await _connection.InvokeAsync<List<Player>>("KillPlayer", playerName);
+            Debug.Log("player killed: " + playerName);
+            GameManager.Instance.players = players.ToArray();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to kill player: {ex}");
+        }
+    }
+
 
     public async Task CreateConnection()
     {
@@ -184,8 +202,6 @@ public class WSGameMap : MonoBehaviour
         }
         return null;
     }
-
-
 }
 
 public record PlayerPositionData

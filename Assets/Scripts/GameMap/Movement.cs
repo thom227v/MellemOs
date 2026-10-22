@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class Movement : MonoBehaviour
@@ -11,6 +12,7 @@ public class Movement : MonoBehaviour
     public GameObject voteButton;
     private string thisName;
     private (float, float) newPosition = (0f, 0f);
+    public GameObject PlayerPrefab;
 
     void Start()
     {
@@ -40,7 +42,6 @@ public class Movement : MonoBehaviour
 
     void OnPositionChanged(PlayerPositionData positionData)
     {
-        Debug.Log("Position data received for player: " + positionData.PlayerId + " with position: (" + positionData.PositionX + ", " + positionData.PositionY + ")");
         if (positionData.PlayerId == thisName)
         {
             newPosition = (positionData.PositionX, positionData.PositionY);
@@ -78,6 +79,20 @@ public class Movement : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.name != "PlayerCollider") return;
+
+        GameObject targetPlayer = other.transform.root.gameObject;
+        if (targetPlayer == gameObject || GameManager.Instance?.players == null) return;
+
+        if (GameManager.Instance.players.Any(p => p.Name == targetPlayer.name))
+        {
+            Debug.Log("Player is in range of: " + targetPlayer.name);
+            RoleManager.Instance.EnableKillAbility(targetPlayer.name);
+        }
+    }
+
     void OnTriggerStay2D(Collider2D other)
     {
         Keyboard kb = Keyboard.current;
@@ -85,13 +100,6 @@ public class Movement : MonoBehaviour
         {
             voteButton.SetActive(true);
         }
-
-        if (GameManager.Instance.players.Where(p => p.Name == other.name).Any())
-        {
-            RoleManager.Instance.EnableKillAbility(other.name);
-        }
-        RoleManager.Instance.DisableKillAbility();
-
 
         switch (other.name)
         {
@@ -137,5 +145,6 @@ public class Movement : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.name == "ReportButton") voteButton.SetActive(false);
+        if (other.name == "PlayerCollider") RoleManager.Instance.DisableKillAbility();
     }
 }
