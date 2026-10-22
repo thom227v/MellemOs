@@ -48,7 +48,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+           // Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
         }
     }
 

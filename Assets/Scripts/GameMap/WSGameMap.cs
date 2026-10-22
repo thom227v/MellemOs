@@ -14,6 +14,7 @@ public class WSGameMap : MonoBehaviour
 
     private HubConnection _connection;
     public event Action<PlayerPositionData> OnPlayerPositionReceived;
+    public event Action<int, int> TasksProgress;
 
     public static WSGameMap Instance { get; private set; }
 
@@ -40,6 +41,12 @@ public class WSGameMap : MonoBehaviour
                 //Debug.Log("Invoked!!!");
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
+            _connection.On<int, int>("TotalTasks", (int completed, int total) =>
+            {
+                TasksProgress?.Invoke(completed, total);
+            });
+
+
             Debug.Log("Start; " + _connection.State);
         }
         catch (Exception e)

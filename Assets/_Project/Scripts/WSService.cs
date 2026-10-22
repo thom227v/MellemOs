@@ -12,6 +12,7 @@ public class WSService : MonoBehaviour
     private const string Hub = "hubs/lobby";
     private HubConnection _connection;
     public event Action<Lobbies> OnLobbiesReceived;
+    public event Action<string[]> LobbyPlayersRecieved;
     public event Action<string, int> OnGameStarted;
 
     public static WSService Instance { get; private set; }
@@ -38,6 +39,11 @@ public class WSService : MonoBehaviour
         {
             Debug.Log("Game started event received.");
             OnGameStarted?.Invoke(lobbyName, matchId);
+        });
+
+        _connection.On("LobbyPlayers", async (string[] players) =>
+        {
+            LobbyPlayersRecieved?.Invoke(players);
         });
 
         try

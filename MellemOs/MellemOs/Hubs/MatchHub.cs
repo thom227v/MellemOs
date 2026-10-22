@@ -99,6 +99,9 @@ public class MatchHub(MatchService matchService) : Hub
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
         Console.WriteLine("matchId" + matchId);
         matchService.CompleteTaskByPlayer(matchId, playername, taskId);
+
+        (int, int) taskProgress = matchService.GetTasksProgress(matchId);
+        await Clients.Group($"match:{matchId}").SendAsync("TotalTasks", taskProgress.Item1, taskProgress.Item2);
     }
 }
 

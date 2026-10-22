@@ -8,7 +8,7 @@ public class EntityMover : MonoBehaviour
     void Start()
     {
         thisName = gameObject.name;
-        Debug.Log("EntityMover script is attached to: " + gameObject.name);
+        //Debug.Log("EntityMover script is attached to: " + gameObject.name);
 
         if (WSGameMap.Instance != null)
         {
@@ -27,7 +27,7 @@ public class EntityMover : MonoBehaviour
 
         if (newPosition != (0f, 0f))
         {
-            Debug.Log("Updating position for player: " + thisName + " to new position: (" + newPosition.Item1 + ", " + newPosition.Item2 + ")");
+            //Debug.Log("Updating position for player: " + thisName + " to new position: (" + newPosition.Item1 + ", " + newPosition.Item2 + ")");
             transform.position = new Vector3(newPosition.Item1, newPosition.Item2, transform.position.z);
             newPosition = (0f, 0f);
             transform.hasChanged = false;
@@ -42,7 +42,7 @@ public class EntityMover : MonoBehaviour
         }
         else
         {
-            Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+            //Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
         }
     }
 
