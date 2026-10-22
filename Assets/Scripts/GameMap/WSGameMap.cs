@@ -14,7 +14,6 @@ public class WSGameMap : MonoBehaviour
 
     private HubConnection _connection;
     public event Action<PlayerPositionData> OnPlayerPositionReceived;
-    public event Action<int, int> TasksProgress;
 
     public static WSGameMap Instance { get; private set; }
 
@@ -41,35 +40,29 @@ public class WSGameMap : MonoBehaviour
                 //Debug.Log("Invoked!!!");
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
-            _connection.On<int, int>("TotalTasks", (int completed, int total) =>
+
+
+            _connection.On<string, string>("VoteRegistered", (voter, votedAgainst) =>
             {
-                TasksProgress?.Invoke(completed, total);
+                Debug.Log($"VoteRegistered event received. Voter: {voter}, Voted Against: {votedAgainst}");
+                GameManager.Instance.newVote = (voter, votedAgainst);
             });
+            _connection.On("VotingStarted", () =>
+            {
+                Debug.Log("VotingStarted event received.");
+                GameManager.Instance.votingStarted = true;
 
-
+            });
+            _connection.On<string>("VotingCompleted", (votedOutPlayer) =>
+            {
+                Debug.Log($"VotingCompleted event received. Voted out player: {votedOutPlayer}");
+                GameManager.Instance.votedOutPlayer = votedOutPlayer;
+            });
             Debug.Log("Start; " + _connection.State);
         }
         catch (Exception e)
         {
             Debug.Log("error" + e.Message);
-        }
-    }
-
-    public async Task KillPlayer(string playerName)
-    {
-        if (_connection == null)
-        {
-            Debug.LogWarning("Connection is not established.");
-        }
-        try
-        {
-            List<Player> players = await _connection.InvokeAsync<List<Player>>("KillPlayer", playerName);
-            Debug.Log("player killed: " + playerName);
-            GameManager.Instance.players = players.ToArray();
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Failed to kill player: {ex}");
         }
     }
 
@@ -209,6 +202,48 @@ public class WSGameMap : MonoBehaviour
         }
         return null;
     }
+
+    public async Task RegisterVote(string votedAgainst)
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            return;
+        }
+        try
+        {
+            Debug.Log("GetPlayers: " + _connection.State);
+            await _connection.InvokeAsync("RegisterVote", GameInformation2.username, votedAgainst);
+            return;
+
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to get all players: {ex}");
+        }
+        return;
+    }
+
+    public async Task StartVote()
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            return;
+        }
+        try
+        {
+            Debug.Log("GetPlayers: " + _connection.State);
+            await _connection.InvokeAsync("StartVote");
+            return;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to get all players: {ex}");
+        }
+        return;
+    }
+
 }
 
 public record PlayerPositionData
