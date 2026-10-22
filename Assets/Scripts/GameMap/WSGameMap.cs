@@ -43,9 +43,9 @@ public class WSGameMap : MonoBehaviour
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
 
-            _connection.On<int,int>("TasksProgress", (completedTasks, totalTasks) =>
+            _connection.On<int,int>("TotalTasks", (completedTasks, totalTasks) =>
             {
-                Debug.Log($"TasksProgress event received. Completed: {completedTasks}, Total: {totalTasks}");
+                Debug.Log($"TotalTasks event received. Completed: {completedTasks}, Total: {totalTasks}");
                 TasksProgress?.Invoke(completedTasks, totalTasks);
             });
 
