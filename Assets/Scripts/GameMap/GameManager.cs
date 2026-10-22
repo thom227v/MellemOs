@@ -20,19 +20,14 @@ public class GameManager : MonoBehaviour
     public GameObject entityPrefab;
     public EntityMover entityMoverScript;
 
-    public Player[] players = null;
-    private Dictionary<string, int> voteCounts = null;
-    public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
-    {
-        Dictionary<string, int> voteCounts = new();
-        foreach (var player in players)
-        {
-            voteCounts[player.Name] = 0;
-        }
-        voteCounts["Skip"] = 0;
-    return voteCounts;
-    }
+    public GameObject VotingBoard;
 
+    public bool votingStarted = false;
+    public Player[] players = null;
+
+    private Dictionary<string, int> voteCounts = null;
+    public (string voter, string votedAgainst) newVote = (null, null);
+    public string votedOutPlayer = null;
 
     public static GameManager Instance { get; private set; }
 
@@ -73,55 +68,89 @@ public class GameManager : MonoBehaviour
         await MinigameManager.Instance.Setup();
     }
 
-    public void ReportButtonTriggered()
+    private void Update()
     {
-        player.GetComponent<Movement>().isVoting = true;
-        votingButton.SetActive(false);
-        votingPanel.SetActive(true);
-        VotingPanelContent.GetComponent<VotingPanel>().votingDataList = new List<VotingData>();
-        VotingPanelContent.GetComponent<VotingPanel>().RenderVotes();
-        VoteOptions.GetComponent<VoteOptions>().Setup(GetVoteOptions());
-        string text = $"Current Voted:  0/{players.Length}";
+        if (votingStarted)
+        {
+            votingStarted = false;
+            Vector2 p = Random.insideUnitCircle * 2f;
+            player.transform.position = VotingBoard.transform.position + new Vector3(p.x, 0f, p.y);
+            player.GetComponent<Movement>().isVoting = true;
+            voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
+            votingButton.SetActive(false);
+            votingPanel.SetActive(true);
+            VotingPanelContent.GetComponent<VotingPanel>().votingDataList = new List<VotingData>();
+            VotingPanelContent.GetComponent<VotingPanel>().RenderVotes();
+            VoteOptions.GetComponent<VoteOptions>().Setup(GetVoteOptions());
+            string text = $"Current Voted:  0/{players.Length}";
+            foreach (var pair in voteCounts)
+                text += $"\n{pair.Key}: {pair.Value}";
+            votedStats.text = text;
+        }
 
-        foreach (var pair in voteCounts)
-            text += $"\n{pair.Key}: {pair.Value}";
+        if (newVote.voter != null && newVote.votedAgainst != null)
+        {
+            VoteRegistered(newVote.voter, newVote.votedAgainst);
+            newVote = (null, null);
+        }
 
-        votedStats.text = text;
+        if (!string.IsNullOrEmpty(votedOutPlayer))
+        {
+            Debug.Log($"Player {votedOutPlayer} was voted out.");
+            StartCoroutine(HandleVotingFinished(votedOutPlayer));
+        }
+    }
+    public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
+    {
+        Dictionary<string, int> voteCounts = new();
+        foreach (var player in players)
+        {
+            if(player.IsAlive) voteCounts[player.Name] = 0;
+        }
+        voteCounts["Skip"] = 0;
+        return voteCounts;
     }
 
-    public void VoteButtonTriggered(TMP_Text votedAgainst)
+    public async void ReportButtonTriggered()
+    {
+        await WSGameMap.Instance.StartVote();
+    }
+
+    public async void VoteButtonTriggered(TMP_Text votedAgainst)
     {
         Debug.Log($"voted against {votedAgainst.text}");
+        await WSGameMap.Instance.RegisterVote(votedAgainst.text);
+    }
 
+    private void VoteRegistered(string voter, string votedAgainst)
+    {
         bool wasAtBottom = IsAtBottom();
-        VotingPanelContent.GetComponent<VotingPanel>().AddVote("Player1", votedAgainst.text);
+        VotingPanelContent.GetComponent<VotingPanel>().AddVote(GameInformation2.username, votedAgainst);
         if (wasAtBottom)
         {
             StartCoroutine(ScrollToBottomNextFrame());
         }
 
-        voteCounts[votedAgainst.text]++;
+        voteCounts[votedAgainst]++;
         string text = $"Current Voted:  {voteCounts.Values.Sum()}/{players.Length}";
         foreach (var pair in voteCounts)
             text += $"\n{pair.Key}: {pair.Value}";
         votedStats.text = text;
 
         player.GetComponent<Movement>().hasVoted = true;
-        VoteOptions.SetActive(false);
+        if (voter == GameInformation2.username)
+            VoteOptions.SetActive(false);
 
-        //if (voteCounts.Values.Sum() == players.Length) HandleVotingFinished();
         Debug.Log("Before 2 sec delay");
-        if (voteCounts.Values.Sum() == 1) StartCoroutine(HandleVotingFinished());
-
-
+        //if (voteCounts.Values.Sum() == players.Length) StartCoroutine(HandleVotingFinished());
     }
 
-    private IEnumerator HandleVotingFinished()
+    private IEnumerator HandleVotingFinished(string votedOutPlayer)
     {
         yield return new WaitForSeconds(1.5f);
 
         string text = $"Voting Finished!\n";
-        string playerHighestVote = voteCounts.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+        string playerHighestVote = votedOutPlayer;
         if (playerHighestVote == "Skip")
         {
             text += "No one was voted out.";
@@ -137,19 +166,31 @@ public class GameManager : MonoBehaviour
         player.GetComponent<Movement>().isVoting = false;
         player.GetComponent<Movement>().hasVoted = false;
         VoteOptions.SetActive(true);
-        if (playerHighestVote != "Skip") players = players.Where(p => p.Name != playerHighestVote).ToArray();
+        if (playerHighestVote != "Skip") {
+            players.FirstOrDefault(p => p.Name == playerHighestVote).IsAlive = false;
+        }
         voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
 
     }
     private List<string> GetVoteOptions()
     {
-        List<string> mockOptions = new List<string>();
+        List<string> voteOptions = new List<string>();
 
         foreach (var player in players)
         {
-            mockOptions.Add(player.Name);
+            if (player.Name == GameInformation2.username) continue;
+            if (player.IsAlive) voteOptions.Add(player.Name);
         }
-        return mockOptions;
+
+        voteOptions.Add("Skip");
+        return voteOptions;
+    }
+
+    public void PlayerDied(string playerName)
+    {
+        GameObject playerObject = GameObject.Find(playerName);
+        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.identity);
+        deadPlayer.name = playerName + " (Dead)";
     }
 
     private bool IsAtBottom()

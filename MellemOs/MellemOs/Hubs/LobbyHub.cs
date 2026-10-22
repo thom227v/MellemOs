@@ -121,6 +121,7 @@ namespace MellemOs.Hubs
             {
                 lobby.GameState = Enums.GameState.Started;
                 int matchId = _matchService.CreateMatch(lobby.Name, lobby.Players.Select(p => p.Name).ToArray());
+
                 await Clients.Others.SendAsync("GameStarted", lobby.Name, matchId);
 
                 Lobbies lobbiesNotStarted = GetLobbiesNotStarted();
@@ -134,7 +135,7 @@ namespace MellemOs.Hubs
             return null;
         }
 
-        public async Task<bool> UsernameCheck(string username)
+        public bool UsernameCheck(string username)
         {
             Lobbies lobbies = _lobbyService.GetLobbies();
             bool isUsernameTaken = lobbies.Lobbier.Any(l => l.Players.Any(p => p.Name == username));

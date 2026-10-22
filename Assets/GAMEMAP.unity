@@ -1947,7 +1947,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1955,15 +1955,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1995,11 +1995,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 402.8756
+      value: 702.4696
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 289.466
+      value: -97.96826
       objectReference: {fileID: 0}
     - target: {fileID: 985843891411032403, guid: 63f567279cd326e48b8f1dca3e651009, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4596,6 +4596,10 @@ PrefabInstance:
       propertyPath: VoteOptions
       value: 
       objectReference: {fileID: 1191781263}
+    - target: {fileID: 4933161979361877124, guid: 9592c110ecb1c954e87cfeae2cac98d8, type: 3}
+      propertyPath: VotingBoard
+      value: 
+      objectReference: {fileID: 1630383527}
     - target: {fileID: 4933161979361877124, guid: 9592c110ecb1c954e87cfeae2cac98d8, type: 3}
       propertyPath: votingPanel
       value: 
@@ -10217,13 +10221,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Current Voted:  2/4
-
-    Player1: 2
-
-    Player2: 1
-
-    Player3: 3'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

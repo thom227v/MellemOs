@@ -76,13 +76,14 @@ public class MatchHub(MatchService matchService) : Hub
         return matchService.GetRoleByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
 
-    public async Task<Player[]> KillPlayer(string playerName)
+    public async void KillPlayer(string playerName)
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
-        return matchService.KillPlayer(matchId, playerName);
+        matchService.KillPlayer(matchId, playerName);
+        await Clients.Group($"match:{matchId}").SendAsync("PlayerDied", playerName);
     }
 
-    public async Task<Player[]> GetPlayers()
+    public async Task<Player[]?> GetPlayers()
     {
         if (Context.Items["matchId"] is not int matchId)
         {
@@ -111,11 +112,41 @@ public class MatchHub(MatchService matchService) : Hub
         (int, int) taskProgress = matchService.GetTasksProgress(matchId);
         await Clients.Group($"match:{matchId}").SendAsync("TotalTasks", taskProgress.Item1, taskProgress.Item2);
     }
+
+    public void StartVote()
+    {
+        var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+        var match = matchService.GetMatchById(matchId);
+        if (match == null)
+        {
+            throw new NotImplementedException();
+        }
+
+        match.Votes.Clear();
+
+        Clients.Group($"match:{matchId}").SendAsync("VotingStarted");
+    }
+
+    public void RegisterVote(string playername, string voteeName)
+    {
+        var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+        var (votingCompleted, votedPlayer) = matchService.RegisterVote(matchId, playername, voteeName);
+
+        if (votingCompleted)
+        {
+            Clients.Group($"match:{matchId}").SendAsync("VotingCompleted", votedPlayer);
+        }
+        else
+        {
+            Console.WriteLine($"Vote registered: {playername} voted for {voteeName} in match {matchId}");
+            Clients.Group($"match:{matchId}").SendAsync("VoteRegistered", playername, voteeName);
+        }
+    }
 }
 
 public record PlayerPositionData
 {
-    public string PlayerId { get; set; }
+    public string PlayerId { get; set; } = String.Empty;
     public float PositionX { get; set; }
     public float PositionY { get; set; }
 }
