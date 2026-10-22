@@ -66,6 +66,12 @@ public class WSGameMap : MonoBehaviour
                 Debug.Log($"VotingCompleted event received. Voted out player: {votedOutPlayer}");
                 GameManager.Instance.votedOutPlayer = votedOutPlayer;
             });
+            _connection.On<string>("PlayerDied", (diedPlayerName) =>
+            {
+                Debug.Log($"PlayerDied event received. Died player: {diedPlayerName}");
+                GameManager.Instance.PlayerDied(diedPlayerName);
+            });
+
             Debug.Log("Start; " + _connection.State);
         }
         catch (Exception e)

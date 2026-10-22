@@ -76,10 +76,11 @@ public class MatchHub(MatchService matchService) : Hub
         return matchService.GetRoleByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
 
-    public async Task<Player[]> KillPlayer(string playerName)
+    public async void KillPlayer(string playerName)
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
-        return matchService.KillPlayer(matchId, playerName);
+        matchService.KillPlayer(matchId, playerName);
+        await Clients.Group($"match:{matchId}").SendAsync("PlayerDied", playerName);
     }
 
     public async Task<Player[]?> GetPlayers()

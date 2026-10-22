@@ -186,6 +186,13 @@ public class GameManager : MonoBehaviour
         return voteOptions;
     }
 
+    public void PlayerDied(string playerName)
+    {
+        GameObject playerObject = GameObject.Find(playerName);
+        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.identity);
+        deadPlayer.name = playerName + " (Dead)";
+    }
+
     private bool IsAtBottom()
     {
         RectTransform content = scrollRect.content;
