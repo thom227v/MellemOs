@@ -41,12 +41,20 @@ public class MatchHub(MatchService matchService) : Hub
             return;
         }
 
-        var playerId = playerPositionData.PlayerId;
-        var positionX = playerPositionData.PositionX;
-        var positionY = playerPositionData.PositionY;
+        Match? match = matchService.GetMatchById(matchId);
+        if (match != null)
+        {
+            Player? player = matchService.GetPlayerInMatch(match, playerPositionData.PlayerId);
+            if (player != null && player.IsAlive)
+            {
+                var playerId = playerPositionData.PlayerId;
+                var positionX = playerPositionData.PositionX;
+                var positionY = playerPositionData.PositionY;
 
-        Console.WriteLine($"Broadcasting player position for {playerId} in match {matchId}: ({positionX}, {positionY})");
-        await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerPositionData);
+                Console.WriteLine($"Broadcasting player position for {playerId} in match {matchId}: ({positionX}, {positionY})");
+                await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerPositionData);
+            }
+        }
     }
 
     private static int GetMatchIdFromRoute(HttpContext? httpContext)
@@ -68,10 +76,10 @@ public class MatchHub(MatchService matchService) : Hub
         return matchService.GetRoleByPlayer(GetMatchIdFromRoute(Context.GetHttpContext()), playername);
     }
 
-    public async Task<Player[]> KillPlayer(string playername)
+    public async Task<Player[]> KillPlayer(string playerName)
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
-        return matchService.KillPlayer(matchId, playername);
+        return matchService.KillPlayer(matchId, playerName);
     }
 
     public async Task<Player[]> GetPlayers()
@@ -99,6 +107,9 @@ public class MatchHub(MatchService matchService) : Hub
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
         Console.WriteLine("matchId" + matchId);
         matchService.CompleteTaskByPlayer(matchId, playername, taskId);
+
+        (int, int) taskProgress = matchService.GetTasksProgress(matchId);
+        await Clients.Group($"match:{matchId}").SendAsync("TotalTasks", taskProgress.Item1, taskProgress.Item2);
     }
 }
 

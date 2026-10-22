@@ -2,6 +2,7 @@
 using MellemOs.Services;
 using Microsoft.AspNetCore.SignalR;
 using System.Formats.Asn1;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MellemOs.Hubs
 {
@@ -61,6 +62,9 @@ namespace MellemOs.Hubs
                     {
                         Name = username
                     });
+
+                    string[] playersInLobby = lobby.Players.Select(p => p.Name).ToArray();
+                    await Clients.Others.SendAsync("LobbyPlayers", playersInLobby);
                 }
             }
         }
@@ -145,8 +149,11 @@ namespace MellemOs.Hubs
                     lobby.Players.Remove(player);
 
                     //_lobbyService.ChangeLobby(lobby);
+                    string[] playersInLobby = lobby.Players.Select(p => p.Name).ToArray();
+                    await Clients.Others.SendAsync("LobbyPlayers", playersInLobby);
                 }
             }
+            
         }
     }
 }

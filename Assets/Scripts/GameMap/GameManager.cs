@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject votingButton;
     public GameObject votingPanel;
+    public GameObject DeadPlayerPrefab;
     public TMP_Text votedStats;
     public GameObject entityPrefab;
     public EntityMover entityMoverScript;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
 
     async void Start()
     {
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Player"));
 
         if (Instance != null && Instance != this)
         {
