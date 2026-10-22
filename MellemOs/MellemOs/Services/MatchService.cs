@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -29,7 +30,7 @@ public class MatchService
             if (murdererPlayer.Name == player.Name) 
             {
                 player.Role = new Role { RoleTitle = RoleEnum.Murderer, AbilityCooldown = 15 };
-                continue;
+                //continue;
             }
             //if (detectivePlayer.Name == player.Name)
             //{
@@ -97,6 +98,15 @@ public class MatchService
         {
             task.Completed = true;
         }
+    }
+
+    public (int, int) GetTasksProgress(int matchId)
+    {
+        Models.Match? match = GetMatchById(matchId);
+        if (match == null) { throw new NotImplementedException(); }
+        int totalTasks = match.Players.Sum(x => x.TasksToDo.Count);
+        int totalTasksCompleted = match.Players.Sum(p => p.TasksToDo.Count(t => t.Completed));
+        return (totalTasksCompleted, totalTasks);
     }
 
     public Role GetRoleByPlayer(int matchId, string playerName)

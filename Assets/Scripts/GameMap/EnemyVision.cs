@@ -9,7 +9,7 @@ public class PlayerVision : MonoBehaviour
 
         foreach (GameObject target in players)
         {
-            Debug.Log(target.name);
+            //Debug.Log(target.name);
             // Skip yourself
             if (target == gameObject)
                 continue;
@@ -40,7 +40,7 @@ public class PlayerVision : MonoBehaviour
                 }
             }
 
-            Debug.Log(canSee.ToString());
+            //Debug.Log(canSee.ToString());
             SpriteRenderer[] sprites = target.GetComponentsInChildren<SpriteRenderer>(true);
             foreach (SpriteRenderer s in sprites)
             {

@@ -8,7 +8,7 @@ public class EntityMover : MonoBehaviour
     void Start()
     {
         thisName = gameObject.name;
-        Debug.Log("EntityMover script is attached to: " + gameObject.name);
+        //Debug.Log("EntityMover script is attached to: " + gameObject.name);
 
         if (WSGameMap.Instance != null)
         {
@@ -27,7 +27,7 @@ public class EntityMover : MonoBehaviour
 
         if (newPosition != (0f, 0f))
         {
-            Debug.Log("Updating position for player: " + thisName + " to new position: (" + newPosition.Item1 + ", " + newPosition.Item2 + ")");
+            //Debug.Log("Updating position for player: " + thisName + " to new position: (" + newPosition.Item1 + ", " + newPosition.Item2 + ")");
             transform.position = new Vector3(newPosition.Item1, newPosition.Item2, transform.position.z);
             newPosition = (0f, 0f);
             transform.hasChanged = false;
@@ -36,14 +36,14 @@ public class EntityMover : MonoBehaviour
 
     void OnPositionChanged(PlayerPositionData positionData)
     {
-        Debug.Log("Position data received for player: " + positionData.PlayerId + " with position: (" + positionData.PositionX + ", " + positionData.PositionY + ")");
+        //Debug.Log("Position data received for player: " + positionData.PlayerId + " with position: (" + positionData.PositionX + ", " + positionData.PositionY + ")");
         if (positionData.PlayerId == thisName)
         {
             newPosition = (positionData.PositionX, positionData.PositionY);
         }
         else
         {
-            Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+            //Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
         }
     }
 

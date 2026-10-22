@@ -108,6 +108,7 @@
     <Compile Include="Assets\Scripts\GameMap\TestingHelper.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\_Project\Scripts\BroadcastService.cs" />
+    <Compile Include="Assets\Scripts\GameMap\ProgressBar.cs" />
     <Compile Include="Assets\Scripts\LobbyScene\LeaveLobby.cs" />
     <Compile Include="Assets\Scripts\Prefab\LightButtonExecutor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />

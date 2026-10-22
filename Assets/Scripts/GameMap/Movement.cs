@@ -40,14 +40,14 @@ public class Movement : MonoBehaviour
 
     void OnPositionChanged(PlayerPositionData positionData)
     {
-        Debug.Log("Position data received for player: " + positionData.PlayerId + " with position: (" + positionData.PositionX + ", " + positionData.PositionY + ")");
+        //Debug.Log("Position data received for player: " + positionData.PlayerId + " with position: (" + positionData.PositionX + ", " + positionData.PositionY + ")");
         if (positionData.PlayerId == thisName)
         {
             newPosition = (positionData.PositionX, positionData.PositionY);
         }
         else
         {
-            Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+           // Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
         }
     }
 
