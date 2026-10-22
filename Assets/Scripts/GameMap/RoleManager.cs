@@ -46,5 +46,13 @@ public class RoleManager : MonoBehaviour
         GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.identity);
         deadPlayer.name = playerName + " (Dead)";
         DisableKillAbility();
+        if (playerName == GameInformation2.username)
+        {
+            GameManager.Instance.player.GetComponent<Movement>().isAlive = false;
+        }
+        else
+        {
+            Destroy(playerObject);
+        }
     }
 }

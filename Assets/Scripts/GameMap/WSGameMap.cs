@@ -69,7 +69,7 @@ public class WSGameMap : MonoBehaviour
             _connection.On<string>("PlayerDied", (diedPlayerName) =>
             {
                 Debug.Log($"PlayerDied event received. Died player: {diedPlayerName}");
-                GameManager.Instance.PlayerDied(diedPlayerName);
+                GameManager.Instance.newPlayerDead = diedPlayerName;
             });
 
             Debug.Log("Start; " + _connection.State);
