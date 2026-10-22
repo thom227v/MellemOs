@@ -41,12 +41,20 @@ public class MatchHub(MatchService matchService) : Hub
             return;
         }
 
-        var playerId = playerPositionData.PlayerId;
-        var positionX = playerPositionData.PositionX;
-        var positionY = playerPositionData.PositionY;
+        Match? match = matchService.GetMatchById(matchId);
+        if (match != null)
+        {
+            Player? player = matchService.GetPlayerInMatch(match, playerPositionData.PlayerId);
+            if (player != null && player.IsAlive)
+            {
+                var playerId = playerPositionData.PlayerId;
+                var positionX = playerPositionData.PositionX;
+                var positionY = playerPositionData.PositionY;
 
-        Console.WriteLine($"Broadcasting player position for {playerId} in match {matchId}: ({positionX}, {positionY})");
-        await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerPositionData);
+                Console.WriteLine($"Broadcasting player position for {playerId} in match {matchId}: ({positionX}, {positionY})");
+                await Clients.Group($"match:{matchId}").SendAsync("PlayerPosition", playerPositionData);
+            }
+        }
     }
 
     private static int GetMatchIdFromRoute(HttpContext? httpContext)
