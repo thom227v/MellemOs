@@ -14,6 +14,8 @@ public class WSGameMap : MonoBehaviour
 
     private HubConnection _connection;
     public event Action<PlayerPositionData> OnPlayerPositionReceived;
+    public event Action<int, int> TasksProgress;
+
 
     public static WSGameMap Instance { get; private set; }
 
@@ -41,6 +43,12 @@ public class WSGameMap : MonoBehaviour
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
 
+            _connection.On<int,int>("TasksProgress", (completedTasks, totalTasks) =>
+            {
+                Debug.Log($"TasksProgress event received. Completed: {completedTasks}, Total: {totalTasks}");
+                TasksProgress?.Invoke(completedTasks, totalTasks);
+            });
+
 
             _connection.On<string, string>("VoteRegistered", (voter, votedAgainst) =>
             {
@@ -65,6 +73,26 @@ public class WSGameMap : MonoBehaviour
             Debug.Log("error" + e.Message);
         }
     }
+
+    public async Task KillPlayer(string playerName)
+    {
+        if (_connection == null)
+        {
+            Debug.LogWarning("Connection is not established.");
+        }
+        try
+        {
+            List<Player> players = await _connection.InvokeAsync<List<Player>>("KillPlayer", playerName);
+            Debug.Log("player killed: " + playerName);
+            GameManager.Instance.players = players.ToArray();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to kill player: {ex}");
+        }
+    }
+
+
 
 
     public async Task CreateConnection()
