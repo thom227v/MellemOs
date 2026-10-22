@@ -133,30 +133,6 @@ public class GameManager : MonoBehaviour
         await WSGameMap.Instance.StartVote();
     }
 
-    public async void CheckEndGame()
-    {
-        Player[] aliveMurderer = players.Where(p => p.Role.RoleTitle == RoleEnum.Murderer && p.IsAlive).ToArray();
-
-        if (aliveMurderer == null)
-        {
-            await WSGameMap.Instance.FinishMatch(true);
-        }
-        else if (players.Where(p => p.IsAlive).ToArray().Length == aliveMurderer.Length)
-        {
-            await WSGameMap.Instance.FinishMatch(false);
-        }
-        return;
-    }
-
-    public async void CheckEndGame(int completedTasks, int totalTasks)
-    {
-        if (completedTasks >= totalTasks)
-        {
-            await WSGameMap.Instance.FinishMatch(true);
-        }
-        return;
-    }
-
     public async void FinishGame(bool playersWon)
     {
         if (playersWon)

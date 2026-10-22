@@ -174,4 +174,30 @@ public class MatchService
         player.IsAlive = false;
         return match.Players;
     }
+
+    public bool? GameFinished(int matchId)
+    {
+        Models.Match? match = GetMatchById(matchId);
+        if (match == null) { return null; }
+
+        (int, int) tasksProgress = GetTasksProgress(matchId);
+        if (tasksProgress.Item1 >= tasksProgress.Item2)
+        {
+            return true;
+        }
+
+        Player[] aliveMurderer = match.Players.Where(p => p.Role?.RoleTitle == RoleEnum.Murderer && p.IsAlive).ToArray();
+
+        if (aliveMurderer == null)
+        {
+            return true;
+        }
+        else if (match.Players.Where(p => p.IsAlive).ToArray().Length == aliveMurderer.Length)
+        {
+            return false;
+        }
+
+
+        return null;
+    }
 }

@@ -80,14 +80,16 @@ public class MatchHub(MatchService matchService) : Hub
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
         await Clients.Group($"match:{matchId}").SendAsync("PlayerDied", playerName);
-        return matchService.KillPlayer(matchId, playerName);
-    }
 
-    public async Task<bool> FinishGame(bool playersWon)
-    {
-        var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
-        await Clients.Group($"match:{matchId}").SendAsync("GameFinished", playersWon);
-        return true;
+        Player[] players = matchService.KillPlayer(matchId, playerName);
+
+        bool? gameFinished = matchService.GameFinished(matchId);
+        if (gameFinished != null)
+        {
+            await Clients.Group($"match:{matchId}").SendAsync("GameFinished", gameFinished);
+        }
+
+        return players;
     }
 
     public async Task<Player[]?> GetPlayers()
@@ -118,6 +120,12 @@ public class MatchHub(MatchService matchService) : Hub
 
         (int, int) taskProgress = matchService.GetTasksProgress(matchId);
         await Clients.Group($"match:{matchId}").SendAsync("TotalTasks", taskProgress.Item1, taskProgress.Item2);
+
+        bool? gameFinished = matchService.GameFinished(matchId);
+        if (gameFinished != null)
+        {
+            await Clients.Group($"match:{matchId}").SendAsync("GameFinished", gameFinished);
+        }
     }
 
     public void StartVote()

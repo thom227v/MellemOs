@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class WSGameMap : MonoBehaviour
 {
-    //public const string ServerAddress = "http://localhost:5258/";
-    public const string ServerAddress = "http://192.168.20.5:7235/";
+    public const string ServerAddress = "http://localhost:5258/";
+    //public const string ServerAddress = "http://192.168.20.5:7235/";
     private const string Hub = "hubs/match";
     private int MatchId = GameInformation2.matchId;
 
@@ -46,7 +46,6 @@ public class WSGameMap : MonoBehaviour
             {
                 Debug.Log($"TotalTasks event received. Completed: {completedTasks}, Total: {totalTasks}");
                 TasksProgress?.Invoke(completedTasks, totalTasks);
-                GameManager.Instance.CheckEndGame(completedTasks, totalTasks);
             });
 
 
@@ -65,13 +64,11 @@ public class WSGameMap : MonoBehaviour
             {
                 Debug.Log($"VotingCompleted event received. Voted out player: {votedOutPlayer}");
                 GameManager.Instance.votedOutPlayer = votedOutPlayer;
-                GameManager.Instance.CheckEndGame();
             });
             _connection.On<string>("PlayerDied", (diedPlayerName) =>
             {
                 Debug.Log($"PlayerDied event received. Died player: {diedPlayerName}");
                 GameManager.Instance.newPlayerDead = diedPlayerName;
-                GameManager.Instance.CheckEndGame();
             });
             _connection.On<bool>("GameFinished", (playersWon) =>
             {
@@ -85,25 +82,6 @@ public class WSGameMap : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log("error" + e.Message);
-        }
-    }
-
-    public async Task FinishMatch(bool playersWon)
-    {
-        if (_connection == null || _connection.State != HubConnectionState.Connected)
-        {
-            Debug.LogWarning("Connection is not established or not connected.");
-            return;
-        }
-        try
-        {
-            Debug.Log("SENDING FINISH GAME");
-            bool finishedCorrect = await _connection.InvokeAsync<bool>("FinishGame", playersWon);
-            Debug.Log("FinishMatch invoked successfully.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Failed to invoke FinishMatch: {ex}");
         }
     }
 
@@ -124,9 +102,6 @@ public class WSGameMap : MonoBehaviour
             Debug.LogError($"Failed to kill player: {ex}");
         }
     }
-
-
-
 
     public async Task CreateConnection()
     {
