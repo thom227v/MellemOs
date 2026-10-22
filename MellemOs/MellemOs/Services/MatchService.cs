@@ -30,7 +30,7 @@ public class MatchService
             if (murdererPlayer.Name == player.Name) 
             {
                 player.Role = new Role { RoleTitle = RoleEnum.Murderer, AbilityCooldown = 15 };
-                //continue;
+                continue;
             }
             //if (detectivePlayer.Name == player.Name)
             //{
