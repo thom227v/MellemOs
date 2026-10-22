@@ -48,7 +48,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-           // Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
+            // Debug.Log("PositionData does not match this entity's ID. Received: " + positionData.PlayerId + ", Expected: " + gameObject.name);
         }
     }
 
@@ -83,13 +83,22 @@ public class Movement : MonoBehaviour
     {
         if (other.name != "PlayerCollider") return;
 
+        Player currentPlayer = GameManager.Instance.players.FirstOrDefault(p => p.Name == GameInformation2.username);
+
+        if ((currentPlayer.Role.RoleTitle != RoleEnum.Murderer) || !currentPlayer.IsAlive) return;
+
         GameObject targetPlayer = other.transform.root.gameObject;
         if (targetPlayer == gameObject || GameManager.Instance?.players == null) return;
 
         if (GameManager.Instance.players.Any(p => p.Name == targetPlayer.name))
         {
-            Debug.Log("Player is in range of: " + targetPlayer.name);
-            RoleManager.Instance.EnableKillAbility(targetPlayer.name);
+            Player[] players = GameManager.Instance.players;
+            Player player = players.FirstOrDefault(p => p.Name == targetPlayer.name);
+            if (player.IsAlive)
+            {
+                Debug.Log("Player is in range of: " + targetPlayer.name);
+                RoleManager.Instance.EnableKillAbility(targetPlayer.name);
+            }
         }
     }
 
