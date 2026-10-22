@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, int> voteCounts = null;
     public (string voter, string votedAgainst) newVote = (null, null);
     public string votedOutPlayer = null;
+    public string newPlayerDead = null;
 
     public bool gameFinished = false;
     public bool playerWon = false;
@@ -109,7 +110,13 @@ public class GameManager : MonoBehaviour
             gameFinished = false;
             FinishGame(playerWon);
         }
+        if (!string.IsNullOrEmpty(newPlayerDead))
+        {
+            PlayerDied(newPlayerDead);
+            newPlayerDead = null;
+        }
     }
+
     public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
     {
         Dictionary<string, int> voteCounts = new();
@@ -218,6 +225,7 @@ public class GameManager : MonoBehaviour
         if (playerHighestVote != "Skip")
         {
             players.FirstOrDefault(p => p.Name == playerHighestVote).IsAlive = false;
+            player.GetComponent<Movement>().isAlive = false;
         }
         voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
     }
@@ -237,9 +245,24 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDied(string playerName)
     {
-        GameObject playerObject = GameObject.Find(playerName);
-        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.Euler(0, 0, -90));
-        deadPlayer.name = playerName + " (Dead)";
+        if (playerName == GameInformation2.username)
+        {
+            player.GetComponent<Movement>().isAlive = false;
+            GameObject deadPlayer = Instantiate(DeadPlayerPrefab, player.transform.position, Quaternion.Euler(0, 0, -90));
+            deadPlayer.name = playerName + " (Dead)";
+        }
+        else
+        {
+            Player player = players.FirstOrDefault(p => p.Name == playerName);
+            if (player != null)
+            {
+                player.IsAlive = false;
+            }
+            GameObject playerObject = GameObject.Find(playerName);
+            GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.Euler(0, 0, -90));
+         deadPlayer.name = playerName + " (Dead)";
+            Destroy(playerObject);
+        }
     }
 
     private bool IsAtBottom()

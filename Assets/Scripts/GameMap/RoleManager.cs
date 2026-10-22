@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SubsystemsImplementation;
@@ -7,6 +9,7 @@ using UnityEngine.UI;
 public class RoleManager : MonoBehaviour
 {
     public GameObject killButton;
+    public TMP_Text killButtonTxt;
     public static RoleManager Instance { get; private set; }
     private string targetPlayerName;
     public GameObject DeadPlayerPrefab;
@@ -28,9 +31,20 @@ public class RoleManager : MonoBehaviour
         killButton.SetActive(false);
     }
 
+    public DateTime canKillAgain = DateTime.MinValue;
     public void EnableKillAbility(string playerName)
     {
-        targetPlayerName = playerName;
+        if (DateTime.Now > canKillAgain)
+        {
+            targetPlayerName = playerName;
+            killButtonTxt.text = "KILL";
+        }
+        else
+        {
+            killButtonTxt.text = "KILL ON COOLDOWN";
+        }
+        
+
         killButton.SetActive(true);
     }
 
@@ -42,8 +56,16 @@ public class RoleManager : MonoBehaviour
 
     private async Task KillPlayer(string playerName)
     {
+        canKillAgain = DateTime.Now.AddSeconds(10);
         await WSGameMap.Instance.KillPlayer(playerName);
-        Destroy(GameObject.Find(playerName));
         DisableKillAbility();
+        if (playerName == GameInformation2.username)
+        {
+            GameManager.Instance.player.GetComponent<Movement>().isAlive = false;
+        }
+        else
+        {
+            Destroy(GameObject.Find(playerName));
+        }
     }
 }

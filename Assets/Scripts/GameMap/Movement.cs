@@ -8,6 +8,8 @@ public class Movement : MonoBehaviour
 {
     public bool isVoting = false;
     public bool hasVoted = false;
+    public bool isAlive = true;
+    private bool alreadyDead = false;
     public float speed = 4f;
     public GameObject voteButton;
     private string thisName;
@@ -29,6 +31,12 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive && !alreadyDead)
+        {
+            alreadyDead = true;
+            PlayerDeath();
+
+        }
 
         if (newPosition != (0f, 0f))
         {
@@ -38,6 +46,22 @@ public class Movement : MonoBehaviour
         }
 
         Walk();
+    }
+
+    void PlayerDeath()
+    {
+        SetOpacity(gameObject, 0.5f);
+        gameObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
+
+    }
+    void SetOpacity(GameObject obj, float alpha)
+    {
+        foreach (var sr in obj.GetComponentsInChildren<SpriteRenderer>())
+        {
+            Color c = sr.color;
+            c.a = alpha;
+            sr.color = c;
+        }
     }
 
     void OnPositionChanged(PlayerPositionData positionData)
@@ -105,7 +129,7 @@ public class Movement : MonoBehaviour
     void OnTriggerStay2D(Collider2D other)
     {
         Keyboard kb = Keyboard.current;
-        if (other.name == "ReportButton")
+        if (other.name.Contains("Dead Entities"))
         {
             voteButton.SetActive(true);
         }
@@ -113,10 +137,7 @@ public class Movement : MonoBehaviour
         switch (other.name)
         {
             case "ReportButton":
-                if (kb.rKey.wasPressedThisFrame)
-                {
-                    GameManager.Instance.ReportButtonTriggered();
-                }
+                voteButton.SetActive(true);
                 break;
             case "ShapesMinigame":
                 if (kb.eKey.wasPressedThisFrame)
@@ -153,7 +174,7 @@ public class Movement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.name == "ReportButton") voteButton.SetActive(false);
+        if (other.name.Contains("Dead Entities") || other.name == "ReportButton") voteButton.SetActive(false);
         if (other.name == "PlayerCollider") RoleManager.Instance.DisableKillAbility();
     }
 }
