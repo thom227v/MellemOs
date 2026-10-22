@@ -83,6 +83,13 @@ public class MatchHub(MatchService matchService) : Hub
         return matchService.KillPlayer(matchId, playerName);
     }
 
+    public async Task<bool> FinishGame(bool playersWon)
+    {
+        var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+        await Clients.Group($"match:{matchId}").SendAsync("GameFinished", playersWon);
+        return true;
+    }
+
     public async Task<Player[]?> GetPlayers()
     {
         if (Context.Items["matchId"] is not int matchId)

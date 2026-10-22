@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, int> voteCounts = null;
     public (string voter, string votedAgainst) newVote = (null, null);
     public string votedOutPlayer = null;
+
+    public bool gameFinished = false;
+    public bool playerWon = false;
 
     public static GameManager Instance { get; private set; }
 
@@ -100,13 +103,19 @@ public class GameManager : MonoBehaviour
             StartCoroutine(HandleVotingFinished(votedOutPlayer));
             votedOutPlayer = null;
         }
+
+        if (gameFinished)
+        {
+            gameFinished = false;
+            FinishGame(playerWon);
+        }
     }
     public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
     {
         Dictionary<string, int> voteCounts = new();
         foreach (var player in players)
         {
-            if(player.IsAlive) voteCounts[player.Name] = 0;
+            if (player.IsAlive) voteCounts[player.Name] = 0;
         }
         voteCounts["Skip"] = 0;
         return voteCounts;
@@ -116,6 +125,45 @@ public class GameManager : MonoBehaviour
     {
         await WSGameMap.Instance.StartVote();
     }
+
+    public async void CheckEndGame()
+    {
+        Player[] aliveMurderer = players.Where(p => p.Role.RoleTitle == RoleEnum.Murderer && p.IsAlive).ToArray();
+
+        if (aliveMurderer == null)
+        {
+            await WSGameMap.Instance.FinishMatch("true");
+        }
+        else if (players.Where(p => p.IsAlive).ToArray().Length == aliveMurderer.Length)
+        {
+            await WSGameMap.Instance.FinishMatch("false");
+        }
+        return;
+    }
+
+    public async void CheckEndGame(int completedTasks, int totalTasks)
+    {
+        if (completedTasks >= totalTasks)
+        {
+            await WSGameMap.Instance.FinishMatch("true");
+        }
+        return;
+    }
+
+    public async void FinishGame(bool playersWon)
+    {
+        if (playersWon)
+        {
+            Debug.Log("Players win");
+            SceneManager.LoadScene("firstscene");
+        }
+        else
+        {
+            Debug.Log("Murderers win");
+            SceneManager.LoadScene("firstscene");
+        }
+    }
+
 
     public async void VoteButtonTriggered(TMP_Text votedAgainst)
     {
@@ -167,7 +215,8 @@ public class GameManager : MonoBehaviour
         player.GetComponent<Movement>().isVoting = false;
         player.GetComponent<Movement>().hasVoted = false;
         VoteOptions.SetActive(true);
-        if (playerHighestVote != "Skip") {
+        if (playerHighestVote != "Skip")
+        {
             players.FirstOrDefault(p => p.Name == playerHighestVote).IsAlive = false;
         }
         voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
@@ -189,7 +238,7 @@ public class GameManager : MonoBehaviour
     public void PlayerDied(string playerName)
     {
         GameObject playerObject = GameObject.Find(playerName);
-        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.identity);
+        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.Euler(0, 0, -90));
         deadPlayer.name = playerName + " (Dead)";
     }
 

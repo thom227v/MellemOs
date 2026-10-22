@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SubsystemsImplementation;
 using UnityEngine.UI;
 
 public class RoleManager : MonoBehaviour
@@ -42,9 +43,7 @@ public class RoleManager : MonoBehaviour
     private async Task KillPlayer(string playerName)
     {
         await WSGameMap.Instance.KillPlayer(playerName);
-        GameObject playerObject = GameObject.Find(playerName);
-        GameObject deadPlayer = Instantiate(DeadPlayerPrefab, playerObject.transform.position, Quaternion.identity);
-        deadPlayer.name = playerName + " (Dead)";
+        Destroy(GameObject.Find(playerName));
         DisableKillAbility();
     }
 }

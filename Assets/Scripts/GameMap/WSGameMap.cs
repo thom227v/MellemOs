@@ -39,7 +39,6 @@ public class WSGameMap : MonoBehaviour
         {
             _connection.On<PlayerPositionData>("PlayerPosition", (playerPositionData) =>
             {
-                //Debug.Log("Invoked!!!");
                 OnPlayerPositionReceived?.Invoke(playerPositionData);
             });
 
@@ -47,6 +46,7 @@ public class WSGameMap : MonoBehaviour
             {
                 Debug.Log($"TotalTasks event received. Completed: {completedTasks}, Total: {totalTasks}");
                 TasksProgress?.Invoke(completedTasks, totalTasks);
+                GameManager.Instance.CheckEndGame(completedTasks, totalTasks);
             });
 
 
@@ -65,11 +65,19 @@ public class WSGameMap : MonoBehaviour
             {
                 Debug.Log($"VotingCompleted event received. Voted out player: {votedOutPlayer}");
                 GameManager.Instance.votedOutPlayer = votedOutPlayer;
+                GameManager.Instance.CheckEndGame();
             });
             _connection.On<string>("PlayerDied", (diedPlayerName) =>
             {
                 Debug.Log($"PlayerDied event received. Died player: {diedPlayerName}");
                 GameManager.Instance.PlayerDied(diedPlayerName);
+                GameManager.Instance.CheckEndGame();
+            });
+            _connection.On<bool>("GameFinished", (playersWon) =>
+            {
+                Debug.Log($"FinishGame event received. Players won: {playersWon}");
+                GameManager.Instance.gameFinished = true;
+                GameManager.Instance.playerWon = playersWon;
             });
 
             Debug.Log("Start; " + _connection.State);
@@ -77,6 +85,24 @@ public class WSGameMap : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log("error" + e.Message);
+        }
+    }
+
+    public async Task FinishMatch(string playersWon)
+    {
+        if (_connection == null || _connection.State != HubConnectionState.Connected)
+        {
+            Debug.LogWarning("Connection is not established or not connected.");
+            return;
+        }
+        try
+        {
+            await _connection.InvokeAsync("FinishGame", playersWon);
+            Debug.Log("FinishMatch invoked successfully.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to invoke FinishMatch: {ex}");
         }
     }
 
