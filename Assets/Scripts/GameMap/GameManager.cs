@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             newVote = (null, null);
         }
 
-        if(votedOutPlayer != null)
+        if (!string.IsNullOrEmpty(votedOutPlayer))
         {
             Debug.Log($"Player {votedOutPlayer} was voted out.");
             StartCoroutine(HandleVotingFinished(votedOutPlayer));
