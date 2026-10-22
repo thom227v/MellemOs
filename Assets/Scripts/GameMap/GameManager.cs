@@ -139,11 +139,11 @@ public class GameManager : MonoBehaviour
 
         if (aliveMurderer == null)
         {
-            await WSGameMap.Instance.FinishMatch("true");
+            await WSGameMap.Instance.FinishMatch(true);
         }
         else if (players.Where(p => p.IsAlive).ToArray().Length == aliveMurderer.Length)
         {
-            await WSGameMap.Instance.FinishMatch("false");
+            await WSGameMap.Instance.FinishMatch(false);
         }
         return;
     }
@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
     {
         if (completedTasks >= totalTasks)
         {
-            await WSGameMap.Instance.FinishMatch("true");
+            await WSGameMap.Instance.FinishMatch(true);
         }
         return;
     }
