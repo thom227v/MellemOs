@@ -88,7 +88,7 @@ public class WSGameMap : MonoBehaviour
         }
     }
 
-    public async Task FinishMatch(string playersWon)
+    public async Task FinishMatch(bool playersWon)
     {
         if (_connection == null || _connection.State != HubConnectionState.Connected)
         {
