@@ -45,6 +45,10 @@ public class WSService : MonoBehaviour
         {
             LobbyPlayersRecieved?.Invoke(players);
         });
+        _connection.On("LobbiesNotStarted", async (Lobbies lobbies) =>
+        {
+            OnLobbiesReceived?.Invoke(lobbies);
+        });
 
         try
         {

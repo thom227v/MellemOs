@@ -1,8 +1,6 @@
 ﻿using MellemOs.Models;
 using MellemOs.Services;
 using Microsoft.AspNetCore.SignalR;
-using System.Formats.Asn1;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MellemOs.Hubs
 {
@@ -65,6 +63,9 @@ namespace MellemOs.Hubs
 
                     string[] playersInLobby = lobby.Players.Select(p => p.Name).ToArray();
                     await Clients.Others.SendAsync("LobbyPlayers", playersInLobby);
+
+                    Lobbies lobbiesNotStarted = GetLobbiesNotStarted();
+                    await Clients.Others.SendAsync("LobbiesNotStarted", lobbiesNotStarted);
                 }
             }
         }
@@ -90,6 +91,9 @@ namespace MellemOs.Hubs
                     GameState = Enums.GameState.NotStarted
                 };
                 _lobbyService.AddLobby(newLobby);
+
+                Lobbies lobbiesNotStarted = GetLobbiesNotStarted();
+                await Clients.Others.SendAsync("LobbiesNotStarted", lobbiesNotStarted);
             }
         }
 
@@ -120,6 +124,8 @@ namespace MellemOs.Hubs
 
                 await Clients.Others.SendAsync("GameStarted", lobby.Name, matchId);
 
+                Lobbies lobbiesNotStarted = GetLobbiesNotStarted();
+                await Clients.Others.SendAsync("LobbiesNotStarted", lobbiesNotStarted);
 
                 return matchId;
 
@@ -148,10 +154,18 @@ namespace MellemOs.Hubs
                 if (player != null)
                 {
                     lobby.Players.Remove(player);
+                    if (lobby.Players.Count() == 0)
+                    {
+                        lobbies.Lobbier.Remove(lobby);
+                    }
+                    else
+                    {
+                        string[] playersInLobby = lobby.Players.Select(p => p.Name).ToArray();
+                        await Clients.Others.SendAsync("LobbyPlayers", playersInLobby);
+                    }
 
-                    //_lobbyService.ChangeLobby(lobby);
-                    string[] playersInLobby = lobby.Players.Select(p => p.Name).ToArray();
-                    await Clients.Others.SendAsync("LobbyPlayers", playersInLobby);
+                    Lobbies lobbiesNotStarted = GetLobbiesNotStarted();
+                    await Clients.Others.SendAsync("LobbiesNotStarted", lobbiesNotStarted);
                 }
             }
             

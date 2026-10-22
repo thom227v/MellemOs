@@ -17,10 +17,6 @@ public class PlayersInLobbyWaiting : MonoBehaviour
             Debug.LogError("WSService.Instance is null. Cannot subscribe to LobbyPlayersRecieved.");
         }
     }
-    async void OnEnable()
-    {
-        await LobbyManager.Instance.UpdatePlayers();
-    }
 
     void Update()
     {
@@ -31,9 +27,13 @@ public class PlayersInLobbyWaiting : MonoBehaviour
         }
     }
 
+    async void OnEnable()
+    {
+        await LobbyManager.Instance.UpdatePlayers();
+    }
+
     private void UpdateLobbyPlayers(string[] players)
     {
-        Debug.Log("RECIEVED PLAYER IN LOBBY");
         string username = GameInformation2.username;
         if (players.Contains(username))
         {
