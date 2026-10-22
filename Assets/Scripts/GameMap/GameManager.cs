@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"Player {votedOutPlayer} was voted out.");
             StartCoroutine(HandleVotingFinished(votedOutPlayer));
+            votedOutPlayer = null;
         }
     }
     public static Dictionary<string, int> GetEmptyVoteDictioaryFromPlayers(Player[] players)
@@ -170,7 +171,6 @@ public class GameManager : MonoBehaviour
             players.FirstOrDefault(p => p.Name == playerHighestVote).IsAlive = false;
         }
         voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
-
     }
     private List<string> GetVoteOptions()
     {

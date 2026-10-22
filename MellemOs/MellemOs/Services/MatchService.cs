@@ -53,7 +53,8 @@ public class MatchService
             else
             {
                 // Handle tie situation
-                return (true, null);
+                Console.WriteLine($"Voting resulted in a tie between players: {string.Join(", ", votedOutPlayers)}. No player will be voted out.");
+                return (true, "Skip");
             }
 
             // Reset votes for the next round
