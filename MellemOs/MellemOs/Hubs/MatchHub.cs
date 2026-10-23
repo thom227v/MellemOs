@@ -163,10 +163,10 @@ public class MatchHub(MatchService matchService) : Hub
         {
             Console.WriteLine($"Voting completed in match {matchId}. Player {votedPlayer} has been voted out.");
             Clients.Group($"match:{matchId}").SendAsync("VotingCompleted", votedPlayer);
-            if (votedPlayer != "Skip")
-            {
-                Clients.Group($"match:{matchId}").SendAsync("PlayerDied", votedPlayer);
-            }
+            //if (votedPlayer != "Skip")
+            //{
+            //    Clients.Group($"match:{matchId}").SendAsync("PlayerDied", votedPlayer);
+            //}
         }
         else
         {
