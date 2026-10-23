@@ -174,7 +174,7 @@ public class MatchHub(MatchService matchService) : Hub
             Clients.Group($"match:{matchId}").SendAsync("VoteRegistered", playername, voteeName);
         }
 
-        Clients.Group($"match:{matchId}").SendAsync("PlayerDied", votedPlayer);
+       // Clients.Group($"match:{matchId}").SendAsync("PlayerDied", votedPlayer);
     }
 }
 
