@@ -34,7 +34,9 @@ public class MatchService
 
         // Check if everyone has voted
         int totalVotes = match.Votes.Values.Sum();
-        if (totalVotes == match.Players.Length)
+
+        int playerLength = match.Players.Where(x => x.IsAlive).Count();
+        if (totalVotes == playerLength)
         {
             // Determine the player with the most votes
             var maxVotes = match.Votes.Values.Max();

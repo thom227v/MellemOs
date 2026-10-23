@@ -145,12 +145,19 @@ public class MatchHub(MatchService matchService) : Hub
     public void RegisterVote(string playername, string voteeName)
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
+
+        Match? match = matchService.GetMatchById(matchId);
+        if (match == null) { return ; }
+        Player? player = matchService.GetPlayerInMatch(match, playername);
+        if (player == null ||player.IsAlive == false) { return; }
+
         var (votingCompleted, votedPlayer) = matchService.RegisterVote(matchId, playername, voteeName);
 
         if (votingCompleted)
         {
             Console.WriteLine($"Voting completed in match {matchId}. Player {votedPlayer} has been voted out.");
             Clients.Group($"match:{matchId}").SendAsync("VotingCompleted", votedPlayer);
+            Clients.Group($"match:{matchId}").SendAsync("PlayerDied", votedPlayer);
         }
         else
         {
