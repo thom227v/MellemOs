@@ -85,7 +85,14 @@ public class GameManager : MonoBehaviour
             votingPanel.SetActive(true);
             VotingPanelContent.GetComponent<VotingPanel>().votingDataList = new List<VotingData>();
             VotingPanelContent.GetComponent<VotingPanel>().RenderVotes();
-            VoteOptions.GetComponent<VoteOptions>().Setup(GetVoteOptions());
+            if (player.GetComponent<Movement>().isAlive == true)
+            {
+                VoteOptions.GetComponent<VoteOptions>().Setup(GetVoteOptions());
+            }
+            else
+            {
+                VoteOptions.SetActive(false);
+            }
             string text = $"Current Voted:  0/{players.Length}";
             foreach (var pair in voteCounts)
                 text += $"\n{pair.Key}: {pair.Value}";
@@ -195,14 +202,22 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         votingPanel.SetActive(false);
-        player.GetComponent<Movement>().isVoting = false;
-        player.GetComponent<Movement>().hasVoted = false;
-        VoteOptions.SetActive(true);
-        if (playerHighestVote != "Skip")
+
+        if (playerHighestVote == GameInformation2.username)
         {
             players.FirstOrDefault(p => p.Name == playerHighestVote).IsAlive = false;
             player.GetComponent<Movement>().isAlive = false;
         }
+        else if (playerHighestVote != "Skip" && (playerHighestVote != GameInformation2.username))
+        {
+            players.FirstOrDefault(p => p.Name == playerHighestVote).IsAlive = false;
+            Destroy(GameObject.Find(playerHighestVote));
+        }
+
+        player.GetComponent<Movement>().isVoting = false;
+        player.GetComponent<Movement>().hasVoted = false;
+        VoteOptions.SetActive(true);
+
         voteCounts = GetEmptyVoteDictioaryFromPlayers(players);
     }
     private List<string> GetVoteOptions()

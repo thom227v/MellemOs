@@ -131,13 +131,13 @@ public class Movement : MonoBehaviour
         Keyboard kb = Keyboard.current;
         if (other.name.Contains("Dead Entities"))
         {
-            voteButton.SetActive(true);
+            if (isAlive == true) voteButton.SetActive(true);
         }
 
         switch (other.name)
         {
             case "ReportButton":
-                voteButton.SetActive(true);
+                if (isAlive == true) voteButton.SetActive(true);
                 break;
             case "ShapesMinigame":
                 if (kb.eKey.wasPressedThisFrame)

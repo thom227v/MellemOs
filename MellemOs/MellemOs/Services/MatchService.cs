@@ -30,11 +30,21 @@ public class MatchService
     {
         Models.Match? match = GetMatchById(matchId);
         if (match == null) throw new NotImplementedException();
+
+        Player? votingPlayer = GetPlayerInMatch(match, playername);
+        if (votingPlayer == null || votingPlayer.IsAlive == false)
+        {
+            return (false, null);
+        }
+
+
         if (!match.Votes.TryAdd(voteeName, 1)) match.Votes[voteeName]++;
+
 
         // Check if everyone has voted
         int totalVotes = match.Votes.Values.Sum();
-        if (totalVotes == match.Players.Length)
+        int playerLength = match.Players.Where(x => x.IsAlive).Count();
+        if (totalVotes == playerLength)
         {
             // Determine the player with the most votes
             var maxVotes = match.Votes.Values.Max();
