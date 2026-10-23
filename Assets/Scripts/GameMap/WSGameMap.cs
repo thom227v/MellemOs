@@ -10,8 +10,8 @@ public class WSGameMap : MonoBehaviour
     /// <summary>
     /// The address of the SignalR server.
     /// </summary>
-   public const string ServerAddress = "http://localhost:5258/";
-    //private const string ServerAddress = "http://83.151.132.159:7235/";
+   //public const string ServerAddress = "http://localhost:5258/";
+    private const string ServerAddress = "http://83.151.132.159:7235/";
     private const string Hub = "hubs/match";
     private int MatchId = GameInformation2.matchId;
 

@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class WSService : MonoBehaviour
 {
-    public const string ServerAddress = "http://localhost:5258/";
-    //public const string ServerAddress = "http://83.151.132.159:7235/";
+    //public const string ServerAddress = "http://localhost:5258/";
+    public const string ServerAddress = "http://83.151.132.159:7235/";
 
 
     private const string Hub = "hubs/lobby";
