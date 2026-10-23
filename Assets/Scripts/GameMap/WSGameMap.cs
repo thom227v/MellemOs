@@ -7,8 +7,12 @@ using UnityEngine;
 
 public class WSGameMap : MonoBehaviour
 {
-    //public const string ServerAddress = "http://localhost:5258/";
-    public const string ServerAddress = "http://192.168.20.5:7235/";
+    /// <summary>
+    /// The address of the SignalR server.
+    /// </summary>
+   //public const string ServerAddress = "http://localhost:5258/";
+    //public const string ServerAddress = "http://192.168.20.5:7235/";
+    private const string ServerAddress = "http://83.151.132.159:7235/";
     private const string Hub = "hubs/match";
     private int MatchId = GameInformation2.matchId;
 
