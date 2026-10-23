@@ -270,7 +270,7 @@ public class WSGameMap : MonoBehaviour
         try
         {
             Debug.Log("GetPlayers: " + _connection.State);
-            await _connection.InvokeAsync("StartVote");
+            await _connection.InvokeAsync("StartVote", GameInformation2.username);
             return;
         }
         catch (Exception ex)

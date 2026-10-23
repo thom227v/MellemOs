@@ -128,13 +128,19 @@ public class MatchHub(MatchService matchService) : Hub
         }
     }
 
-    public void StartVote()
+    public void StartVote(string username)
     {
         var matchId = GetMatchIdFromRoute(Context.GetHttpContext());
         var match = matchService.GetMatchById(matchId);
         if (match == null)
         {
             throw new NotImplementedException();
+        }
+
+        Player? player = matchService.GetPlayerInMatch(match, username);
+        if(player == null || player.IsAlive == false)
+        {
+            return;
         }
 
         match.Votes.Clear();
